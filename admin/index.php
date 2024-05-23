@@ -12,22 +12,11 @@
     <title>Dashboard</title>
     <?php require './partials/head.php'; ?>
     <style>
-        .divider:after,
-        .divider:before {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: #eee;
-        }
+        .middle {
+            height: 100vh;
 
-        .h-custom {
-            height: calc(100% - 73px);
-        }
-
-        @media (max-width: 450px) {
-            .h-custom {
-                height: 100%;
-            }
+            display: grid;
+            place-content: center;
         }
     </style>
 </head>
@@ -40,6 +29,15 @@
         <span id="closeButton"></span>
     </div>
 
+
+    <div class="middle border">
+        <div class="container">
+            <a href="http://localhost/garden-brew/admin/admin.php" class="btn btn-pink">Admin</a>
+            <a href="http://localhost/garden-brew/admin/invoice.php" class="btn btn-pink">Invoice</a>
+            <a href="http://localhost/garden-brew/admin/cash_payment.php" class="btn btn-pink">Cash Payment</a>
+            <a href="http://localhost/garden-brew/admin/report.php" class="btn btn-pink">Report</a>
+        </div>
+    </div>
   
 
    
