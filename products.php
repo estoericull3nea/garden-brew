@@ -1,3 +1,11 @@
+<?php 
+session_start();
+if(!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true )) {
+    header("Location: http://localhost/garden-brew/login.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

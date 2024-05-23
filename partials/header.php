@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center  gap-2 " href="http://localhost/garden-brew/">
@@ -12,7 +11,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-4">
                 <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="#">Home</a>
+                    <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/products.php">Products</a>
