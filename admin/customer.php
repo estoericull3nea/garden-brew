@@ -131,6 +131,51 @@
     </div>
 
 
+    <!-- Modal edit user -->
+    <div class="modal fade" id="modal_edit_customer" tabindex="-1" aria-labelledby="modal_edit_customerLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modal_edit_customerLabel">Edit Customer</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="form_edit_customer">
+                        <input type="hidden" name="user_id" id="edit_user_id">
+                        <div class="mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control shadow-none" required name="fname" id="edit_fname">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control shadow-none" required name="lname" id="edit_lname">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone Number</label>
+                            <input type="number" class="form-control shadow-none" required name="phone_number" id="edit_phone_number">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control shadow-none" required name="address" id="edit_address">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control shadow-none" required name="username" id="edit_username">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control shadow-none" name="password" id="edit_password">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-pink">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 
 
@@ -154,6 +199,7 @@
                     <td>${product.phone_number}</td>
                     <td>${product.address}</td>
                     <td>
+                        <button class="btn btn-warning" onclick="editCustomer(${product.user_id})">Edit</button>
                         <button class="btn btn-danger" onclick="deleteCustomer(${product.user_id})">Delete</button>
                     </td>
                 </tr>
@@ -216,6 +262,57 @@
             }
         }
 
+
+        function editCustomer(user_id) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/customers/get_user.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                const user = JSON.parse(xhr.responseText);
+
+                document.getElementById('edit_user_id').value = user.user_id;
+                document.getElementById('edit_fname').value = user.fname;
+                document.getElementById('edit_lname').value = user.lname;
+                document.getElementById('edit_phone_number').value = user.phone_number;
+                document.getElementById('edit_address').value = user.address;
+                document.getElementById('edit_username').value = user.username;
+
+                $('#modal_edit_customer').modal('show');
+            }
+            xhr.send(JSON.stringify({
+                user_id
+            }));
+        }
+
+        const form_edit_customer = document.getElementById('form_edit_customer');
+        form_edit_customer.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const form_data = new FormData(form_edit_customer);
+
+            const json_data = {};
+            for (const [key, value] of form_data.entries()) {
+                json_data[key] = value;
+            }
+            const json_string = JSON.stringify(json_data);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/customers/update_user.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.responseText === 'User updated successfully.') {
+                    display_custom_toast('User updated successfully.', 'success', 2000);
+                    fetch_products();
+                    form_edit_customer.reset();
+                    $('#modal_edit_customer').modal('hide');
+                } else {
+                    display_custom_toast('Error updating user.', 'danger', 2000);
+                }
+
+                console.log(xhr.responseText);
+            }
+            xhr.send(json_string);
+        });
 
 
         addEventListener("DOMContentLoaded", () => {
