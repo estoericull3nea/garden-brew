@@ -41,13 +41,13 @@
 
             <div class="d-flex flex-column align-items-end gap-3 mt-4 mb-5">
                 <div>
-                    <label for="paymentMode" class="fw-medium ">Select Mode of Payment:</label>
+                    <label for="paymentMode" class="fw-medium">Select Mode of Payment:</label>
                     <select id="paymentMode" class="form-select shadow-none" role="button" style="border-color: #ff70a6;">
                         <option value="cod">Cash on Delivery</option>
                         <option value="gcash">GCash</option>
                     </select>
                 </div>
-                <button class="btn btn-pink" onclick="order_now()">Order It Now</button>
+                <button id="orderButton" class="btn btn-pink" onclick="order_now()">Order It Now</button>
             </div>
 
         </div>
@@ -64,6 +64,14 @@
                 const data = JSON.parse(xhr.responseText)
                 const table_show_cart = document.getElementById('table_show_cart')
                 table_show_cart.innerHTML = ''
+
+                if (data.length === 0) {
+                    paymentMode.disabled = true;
+                    orderButton.disabled = true;
+                } else {
+                    paymentMode.disabled = false;
+                    orderButton.disabled = false;
+                }
 
                 data.forEach(cart => {
                     const cart_item = `

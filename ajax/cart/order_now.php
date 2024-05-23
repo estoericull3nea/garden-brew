@@ -11,22 +11,38 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Start transaction
-$conn->begin_transaction();
-
 try {
-    // Here you can add the logic to create an order, for example, saving the order details to an `orders` table
-    // For simplicity, we assume an orders table with fields: user_id, payment_mode, order_date
+    // Start transaction
+    $conn->begin_transaction();
 
-    // Insert the order
-    $sql = "INSERT INTO orders (user_id, payment_mode) VALUES ( ?, ?)";
+    // Fetch the user's first name
+    $sql = "SELECT fname, lname FROM users WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
-
     if ($stmt === false) {
         throw new Exception("Prepare failed: " . $conn->error);
     }
 
-    $stmt->bind_param("is", $user_id, $payment_mode);
+    $stmt->bind_param("i", $user_id);
+    if (!$stmt->execute()) {
+        throw new Exception("Failed to fetch user details: " . $stmt->error);
+    }
+
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    $fname = $user['fname'];
+    $lname = $user['lname'];
+    $stmt->close();
+
+    // Insert the order with the user's first name
+    $sql = "INSERT INTO orders (user_id, customer_fullname, payment_mode) VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        throw new Exception("Prepare failed: " . $conn->error);
+    }
+
+    $fullname = $fname . ' ' . $lname;
+
+    $stmt->bind_param("iss", $user_id, $fullname, $payment_mode);
     if (!$stmt->execute()) {
         throw new Exception("Failed to place order: " . $stmt->error);
     }
