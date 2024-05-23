@@ -17,12 +17,6 @@
                 <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/products.php">Products</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="#">Contact</a>
-                </li>
                 <li class="nav-item position-relative">
                     <a class="nav-link position-relative" aria-current="page" href="http://localhost/garden-brew/cart.php">Cart</a>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -30,9 +24,9 @@
                         <span class="visually-hidden">unread messages</span>
                     </span>
                 </li>
-
-
-
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/order-status.php">Orders Status</a>
+                </li>
             </ul>
             <?php if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) : ?>
                 <div>

@@ -16,7 +16,7 @@ try {
     $conn->begin_transaction();
 
     // Fetch the user's first name
-    $sql = "SELECT fname, lname FROM users WHERE user_id = ?";
+    $sql = "SELECT fname, lname, phone_number, address FROM users WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
     if ($stmt === false) {
         throw new Exception("Prepare failed: " . $conn->error);
@@ -31,10 +31,12 @@ try {
     $user = $result->fetch_assoc();
     $fname = $user['fname'];
     $lname = $user['lname'];
+    $phone_number = $user['phone_number'];
+    $address = $user['address'];
     $stmt->close();
 
     // Insert the order with the user's first name
-    $sql = "INSERT INTO orders (user_id, customer_fullname, payment_mode) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO orders (user_id, customer_fullname, customer_phonenumber, customer_address, payment_mode) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     if ($stmt === false) {
         throw new Exception("Prepare failed: " . $conn->error);
@@ -42,7 +44,7 @@ try {
 
     $fullname = $fname . ' ' . $lname;
 
-    $stmt->bind_param("iss", $user_id, $fullname, $payment_mode);
+    $stmt->bind_param("issss", $user_id, $fullname, $phone_number, $address, $payment_mode);
     if (!$stmt->execute()) {
         throw new Exception("Failed to place order: " . $stmt->error);
     }
