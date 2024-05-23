@@ -72,6 +72,7 @@
                         <th scope="col">Username</th>
                         <th scope="col">Phone Number</th>
                         <th scope="col">Address</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody id="all_prods">
@@ -139,29 +140,30 @@
             xhr.open('POST', './ajax/customers/fetch_all.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
+                const all_prods = document.getElementById('all_prods');
+                all_prods.innerHTML = ``;
 
-                const all_prods = document.getElementById('all_prods')
-                all_prods.innerHTML = ``
-
-                const data = JSON.parse(xhr.responseText)
+                const data = JSON.parse(xhr.responseText);
                 data.forEach(product => {
                     const product_card = `
-
-                    <tr>
-                        <td>${product.user_id}</td>
-                        <td>${product.fname}</td>
-                        <td>${product.lname}</td>
-                        <td>${product.username}</td>
-                        <td>${product.phone_number}</td>
-                        <td>${product.address}</td>
-                    </tr>
-                       
-                   `
+                <tr>
+                    <td>${product.user_id}</td>
+                    <td>${product.fname}</td>
+                    <td>${product.lname}</td>
+                    <td>${product.username}</td>
+                    <td>${product.phone_number}</td>
+                    <td>${product.address}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteCustomer(${product.user_id})">Delete</button>
+                    </td>
+                </tr>
+            `;
                     all_prods.innerHTML += product_card;
-                })
+                });
             }
-            xhr.send()
+            xhr.send();
         }
+
 
 
         const form_add_customer = document.getElementById('form_add_customer')
@@ -194,6 +196,25 @@
             }
             xhr.send(json_string)
         })
+
+        function deleteCustomer(user_id) {
+            if (confirm('Are you sure you want to delete this customer?')) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', './ajax/customers/delete_user.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onload = function() {
+                    if (xhr.responseText === 'User deleted successfully.') {
+                        display_custom_toast('User deleted successfully.', 'success', 2000);
+                        fetch_products();
+                    } else {
+                        display_custom_toast('Error deleting user.', 'danger', 2000);
+                    }
+                }
+                xhr.send(JSON.stringify({
+                    user_id
+                }));
+            }
+        }
 
 
 

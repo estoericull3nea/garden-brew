@@ -32,10 +32,12 @@
 
     <div class="middle border">
         <div class="container">
+            <h1 class="text-center">Dashboard</h1>
             <a href="http://localhost/garden-brew/admin/admin.php" class="btn btn-pink">Admin</a>
             <a href="http://localhost/garden-brew/admin/invoice.php" class="btn btn-pink">Invoice</a>
             <a href="http://localhost/garden-brew/admin/cash_payment.php" class="btn btn-pink">Cash Payment</a>
             <a href="http://localhost/garden-brew/admin/report.php" class="btn btn-pink">Report</a>
+            <a href="http://localhost/garden-brew/admin/report.php" class="btn btn-pink">Sales</a>
         </div>
     </div>
   
