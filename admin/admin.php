@@ -44,6 +44,22 @@
                         Customer Info
                     </a>
                 </li>
+                <li>
+                    <a href="http://localhost/garden-brew/admin/" class="nav-link text-pink">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#speedometer2" />
+                        </svg>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="http://localhost/garden-brew/admin/logout.php" class="nav-link text-pink">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#speedometer2" />
+                        </svg>
+                        Logout
+                    </a>
+                </li>
             </ul>
             <hr>
         </div>
@@ -206,6 +222,7 @@
                     fetch_products();
                     form_update_product.reset();
                     document.getElementById('closeButton').click();
+                    hideModal('modal_update_product')
                 } else {
                     alert(response.error);
                 }
