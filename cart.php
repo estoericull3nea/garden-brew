@@ -25,6 +25,7 @@
                         <th scope="col">Quantity</th>
                         <th scope="col">Product Price</th>
                         <th scope="col">Product Image</th>
+                        <th scope="col">Total Price</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -55,6 +56,7 @@
                             <td>${cart.qty}</td>
                             <td>${cart.prod_price}</td>
                             <td><img src="./assets/images/milktea/classic/${cart.prod_img}" style="height: 90px; width: 90px;"></td>
+                            <td>${cart.total_price}</td>
                             <td>
                                 <button class="btn btn-sm btn-pink" onclick="remove_cart(${cart.cart_id})">Remove</button>
                             </td>

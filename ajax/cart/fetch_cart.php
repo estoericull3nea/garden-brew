@@ -14,7 +14,8 @@ products.prod_name,
 products.prod_price, 
 products.prod_img,
 users.fname,
-users.lname
+users.lname,
+(cart.qty * products.prod_price) AS total_price
 FROM cart 
 INNER JOIN products ON cart.prod_id = products.prod_id 
 INNER JOIN users ON cart.user_id = users.user_id
