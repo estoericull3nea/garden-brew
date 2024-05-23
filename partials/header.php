@@ -15,7 +15,7 @@
                     <a class="nav-link " aria-current="page" href="#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="#">Products</a>
+                    <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/products.php">Products</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="#">About</a>
@@ -24,7 +24,7 @@
                     <a class="nav-link " aria-current="page" href="#">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="#">Cart</a>
+                    <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/cart.php">Cart</a>
                 </li>
 
             </ul>

@@ -53,6 +53,11 @@
     require './partials/header.php';
     ?>
 
+    <div id="customMessage" class="custom-message d-flex align-items-center justify-content-between gap-2 ">
+        <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-normal text-center"></p>
+        <span id="closeButton"></span>
+    </div>
+
 
     <div id="bg-img"></div>
 
@@ -151,7 +156,10 @@
             xhr.open('POST', './ajax/products/add_cart.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
-                console.log(xhr.responseText);
+                if (xhr.responseText === '1') {
+                    form.reset()
+                    display_custom_toast('Added to Cart', 'success', 2000)
+                }
             }
             xhr.send(JSON.stringify({
                 prod_id,
