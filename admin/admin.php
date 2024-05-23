@@ -49,6 +49,9 @@
         </div>
 
         <div class="w-100 container">
+            <div class="text-end mt-3">
+                <button class="btn btn-sm btn-pink mb-3" data-bs-toggle="modal" data-bs-target="#modal_add_product">Add Product</button>
+            </div>
             <table class="table text-center align-middle">
                 <thead>
                     <tr>
@@ -66,23 +69,62 @@
         </div>
     </main>
 
-    <!-- Modal add stock -->
-    <div class="modal fade" id="modal_add_stock" tabindex="-1" aria-labelledby="modal_add_stockLabel" aria-hidden="true">
+    <!-- Modal update product -->
+    <div class="modal fade" id="modal_update_product" tabindex="-1" aria-labelledby="modal_update_productLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modal_add_stockLabel">Adding stock</h1>
+                    <h1 class="modal-title fs-5" id="modal_update_productLabel">Update Product</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="form_change_stock" method="POST">
+                    <form id="form_update_product" method="POST">
                         <input type="hidden" id="product_id" name="prod_id">
                         <div class="mb-3">
-                            <label class="form-label">Input new stock quantity</label>
+                            <label class="form-label">Product Name</label>
+                            <input type="text" class="form-control form-control-sm shadow-none" id="product_name" name="prod_name">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Product Price</label>
+                            <input type="number" step="0.01" class="form-control form-control-sm shadow-none" id="product_price" name="prod_price">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Stock Quantity</label>
                             <input type="number" class="form-control form-control-sm shadow-none" id="stock_quantity" name="stock">
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-pink">Update Stock</button>
+                            <button type="submit" class="btn btn-pink">Update Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal add product -->
+    <div class="modal fade" id="modal_add_product" tabindex="-1" aria-labelledby="modal_add_productLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modal_add_productLabel">Add Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form_add_product" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Product Name</label>
+                            <input type="text" class="form-control form-control-sm shadow-none" id="new_product_name" name="prod_name">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Product Price</label>
+                            <input type="number" step="0.01" class="form-control form-control-sm shadow-none" id="new_product_price" name="prod_price">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Stock Quantity</label>
+                            <input type="number" class="form-control form-control-sm shadow-none" id="new_stock_quantity" name="stock">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-pink">Add Product</button>
                         </div>
                     </form>
                 </div>
@@ -107,7 +149,7 @@
                             <td>${product.prod_price}</td>
                             <td>${product.stocks}</td>
                             <td>
-                                <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#modal_add_stock" onclick="setProductId(${product.prod_id})">Update Stock</button>
+                                <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#modal_update_product" onclick="setProductDetails(${product.prod_id}, '${product.prod_name}', ${product.prod_price}, ${product.stocks})">Update</button>
                                 <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.prod_id})">Delete</button>
                             </td>
                         </tr>
@@ -118,8 +160,11 @@
             xhr.send();
         }
 
-        function setProductId(productId) {
-            document.getElementById('product_id').value = productId;
+        function setProductDetails(prodId, prodName, prodPrice, stock) {
+            document.getElementById('product_id').value = prodId;
+            document.getElementById('product_name').value = prodName;
+            document.getElementById('product_price').value = prodPrice;
+            document.getElementById('stock_quantity').value = stock;
         }
 
         function deleteProduct(productId) {
@@ -135,15 +180,17 @@
                         alert(response.error);
                     }
                 };
-                const json_data = JSON.stringify({ prod_id: productId });
+                const json_data = JSON.stringify({
+                    prod_id: productId
+                });
                 xhr.send(json_data);
             }
         }
 
-        const form_change_stock = document.getElementById('form_change_stock');
-        form_change_stock.addEventListener('submit', e => {
+        const form_update_product = document.getElementById('form_update_product');
+        form_update_product.addEventListener('submit', e => {
             e.preventDefault();
-            const form_data = new FormData(form_change_stock);
+            const form_data = new FormData(form_update_product);
             const json_data = {};
             for (const [key, value] of form_data.entries()) {
                 json_data[key] = value;
@@ -151,15 +198,40 @@
             const json_string = JSON.stringify(json_data);
 
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', './ajax/products/update_stock.php', true);
+            xhr.open('POST', './ajax/products/update_product.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const response = JSON.parse(xhr.responseText);
                 if (response.success) {
                     fetch_products();
-                    form_change_stock.reset();
+                    form_update_product.reset();
                     document.getElementById('closeButton').click();
-                    hideModal('modal_add_stock');
+                } else {
+                    alert(response.error);
+                }
+            };
+            xhr.send(json_string);
+        });
+
+        const form_add_product = document.getElementById('form_add_product');
+        form_add_product.addEventListener('submit', e => {
+            e.preventDefault();
+            const form_data = new FormData(form_add_product);
+            const json_data = {};
+            for (const [key, value] of form_data.entries()) {
+                json_data[key] = value;
+            }
+            const json_string = JSON.stringify(json_data);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/products/add_product.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    fetch_products();
+                    form_add_product.reset();
+                    document.getElementById('closeButton').click();
                 } else {
                     alert(response.error);
                 }
