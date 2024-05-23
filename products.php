@@ -158,6 +158,7 @@
             xhr.onload = function() {
                 if (xhr.responseText === '1') {
                     form.reset()
+                    get_total_cart()
                     display_custom_toast('Added to Cart', 'success', 2000)
                 }
             }
@@ -198,9 +199,12 @@
         }
 
 
-        window.onload = function() {
+    
+
+        addEventListener("DOMContentLoaded", () => {
             fetch_classic_milktea()
-        };
+
+        });
     </script>
 </body>
 
