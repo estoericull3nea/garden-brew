@@ -24,7 +24,7 @@
                     </span>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/order-status.php">Orders Status</a>
+                    <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/order-status.php">Orders Status/Tracking</a>
                 </li>
             </ul>
             <?php if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) : ?>
