@@ -1,10 +1,3 @@
-<?php
-// session_start();
-// if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) {
-//     header("Location: http://localhost/garden-brew/");
-//     exit();
-// }
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +7,6 @@
     <style>
         .middle {
             height: 100vh;
-
             display: grid;
             place-content: center;
         }
@@ -23,12 +15,10 @@
 
 <body>
 
-
     <div id="customMessage" class="custom-message d-flex align-items-center justify-content-between gap-2 ">
         <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-normal text-center"></p>
         <span id="closeButton"></span>
     </div>
-
 
     <main class="d-flex flex-nowrap ">
 
@@ -56,7 +46,6 @@
                 </li>
             </ul>
             <hr>
-
         </div>
 
         <div class="w-100 container">
@@ -75,9 +64,6 @@
                 </tbody>
             </table>
         </div>
-
-
-
     </main>
 
     <!-- Modal add stock -->
@@ -92,20 +78,17 @@
                     <form id="form_change_stock" method="POST">
                         <input type="hidden" id="product_id" name="prod_id">
                         <div class="mb-3">
-                            <label class="form-label">Input number of stock to be add</label>
+                            <label class="form-label">Input new stock quantity</label>
                             <input type="number" class="form-control form-control-sm shadow-none" id="stock_quantity" name="stock">
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-pink">Add</button>
+                            <button type="submit" class="btn btn-pink">Update Stock</button>
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
-
-
 
     <script>
         function fetch_products() {
@@ -113,11 +96,9 @@
             xhr.open('POST', './ajax/products/fetch_products.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
-
-                const all_prods = document.getElementById('all_prods')
-                all_prods.innerHTML = ``
-
-                const data = JSON.parse(xhr.responseText)
+                const all_prods = document.getElementById('all_prods');
+                all_prods.innerHTML = ``;
+                const data = JSON.parse(xhr.responseText);
                 data.forEach(product => {
                     const product_card = `
                         <tr>
@@ -126,20 +107,38 @@
                             <td>${product.prod_price}</td>
                             <td>${product.stocks}</td>
                             <td>
-                                <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#modal_add_stock" onclick="setProductId(${product.prod_id})">Add Stock</button>
+                                <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#modal_add_stock" onclick="setProductId(${product.prod_id})">Update Stock</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.prod_id})">Delete</button>
                             </td>
                         </tr>
-                   `
+                    `;
                     all_prods.innerHTML += product_card;
-                })
-            }
-            xhr.send()
+                });
+            };
+            xhr.send();
         }
 
         function setProductId(productId) {
             document.getElementById('product_id').value = productId;
         }
 
+        function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', './ajax/products/delete_product.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onload = function() {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        fetch_products();
+                    } else {
+                        alert(response.error);
+                    }
+                };
+                const json_data = JSON.stringify({ prod_id: productId });
+                xhr.send(json_data);
+            }
+        }
 
         const form_change_stock = document.getElementById('form_change_stock');
         form_change_stock.addEventListener('submit', e => {
@@ -152,7 +151,7 @@
             const json_string = JSON.stringify(json_data);
 
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', './ajax/products/add_stock.php', true);
+            xhr.open('POST', './ajax/products/update_stock.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const response = JSON.parse(xhr.responseText);
@@ -160,7 +159,7 @@
                     fetch_products();
                     form_change_stock.reset();
                     document.getElementById('closeButton').click();
-                    hideModal('modal_add_stock')
+                    hideModal('modal_add_stock');
                 } else {
                     alert(response.error);
                 }
@@ -169,7 +168,7 @@
         });
 
         addEventListener("DOMContentLoaded", () => {
-            fetch_products()
+            fetch_products();
         });
     </script>
 </body>
