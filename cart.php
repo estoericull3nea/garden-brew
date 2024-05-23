@@ -53,7 +53,13 @@
                         <tr>
                             <td>${cart.fname} ${cart.lname}</td>
                             <td>${cart.prod_name}</td>
-                            <td>${cart.qty}</td>
+                            <td>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.qty - 1})">-</button>
+                                    <input type="number" value="${cart.qty}" min="1" class="form-control mx-2" style="width: 60px; text-align: center;" disabled>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.qty + 1})">+</button>
+                                </div>
+                            </td>
                             <td>${cart.prod_price}</td>
                             <td><img src="./assets/images/milktea/classic/${cart.prod_img}" style="height: 90px; width: 90px;"></td>
                             <td>${cart.total_price}</td>
@@ -83,6 +89,24 @@
             xhr.send(JSON.stringify({
                 cart_id
             }))
+        }
+
+        function update_quantity(cart_id, new_quantity) {
+            if (new_quantity < 1) return;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/cart/update_quantity.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.responseText === '1') {
+                    fetch_cart();
+                    get_total_cart();
+                }
+            };
+            xhr.send(JSON.stringify({
+                cart_id,
+                qty: new_quantity
+            }));
         }
 
         addEventListener("DOMContentLoaded", () => {
