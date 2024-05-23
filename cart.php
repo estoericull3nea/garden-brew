@@ -33,6 +33,23 @@
 
                 </tbody>
             </table>
+
+            <!-- <div class="text-end mt-4">
+                <button class="btn btn-pink">Order it now!</button>
+            </div> -->
+
+
+            <div class="d-flex flex-column align-items-end gap-3 mt-4 mb-5">
+                <div>
+                    <label for="paymentMode" class="fw-medium ">Select Mode of Payment:</label>
+                    <select id="paymentMode" class="form-select shadow-none" role="button" style="border-color: #ff70a6;">
+                        <option value="cod">Cash on Delivery</option>
+                        <option value="gcash">GCash</option>
+                    </select>
+                </div>
+                <button class="btn btn-pink" onclick="order_now()">Order It Now</button>
+            </div>
+
         </div>
     </div>
 
@@ -106,6 +123,25 @@
             xhr.send(JSON.stringify({
                 cart_id,
                 qty: new_quantity
+            }));
+        }
+
+        function order_now() {
+            const paymentMode = document.getElementById('paymentMode').value;
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/cart/order_now.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                const response = JSON.parse(xhr.responseText);
+                if (response.status === 'success') {
+                    display_custom_toast('Order placed successfully', 'success', 3000);
+                    fetch_cart();
+                } else {
+                    display_custom_toast('Failed to place order', 'error', 2000);
+                }
+            };
+            xhr.send(JSON.stringify({
+                paymentMode
             }));
         }
 
