@@ -6,7 +6,6 @@ $data = json_decode(file_get_contents('php://input'), true);
 $username = $data['username'] ?? '';
 $password = $data['password'] ?? '';
 
-
 // Validate the input
 if (!empty($username) && !empty($password)) {
     // Check if the user exists in the database
@@ -20,25 +19,26 @@ if (!empty($username) && !empty($password)) {
     // If user exists, check the password
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-        if ($user['password'] === $password) {
+        if (password_verify($password, $user['password'])) {
             session_start();
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['user_logged_in'] = true;
             $_SESSION['user'] = $username;
             echo '1';
         } else {
-            echo  'Incorrect password';
+            echo 'Incorrect password';
         }
     } else {
-       echo 'User does not exist';
+        echo 'User does not exist';
     }
 
     // Close the statement
     $stmt->close();
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Username and password required']);
 }
 
 // Close the connection
 $conn->close();
 
-// Return the response
-header('Content-Type: application/json');
+// Set content type to JSON
