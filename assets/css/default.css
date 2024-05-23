@@ -1,0 +1,47 @@
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
+.text-pink {
+  color: #ff70a6;
+}
+
+.btn-pink {
+  background: #ff70a6;
+  border-color: #ff70a6;
+  color: white;
+}
+
+.btn-pink:hover {
+  background: #ff70a7b3;
+  border-color: #ff70a6;
+}
+
+/* start of custom message */
+.custom-message {
+  position: fixed;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  z-index: 9999;
+  opacity: 0;
+  transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.show-message {
+  top: 20px;
+  opacity: 1;
+}
+
+.close-button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+/* end of custom message */
