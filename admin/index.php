@@ -38,6 +38,7 @@
             <a href="http://localhost/garden-brew/admin/cash_payment.php" class="btn btn-pink">Cash Payment</a>
             <a href="http://localhost/garden-brew/admin/report.php" class="btn btn-pink">Report</a>
             <a href="http://localhost/garden-brew/admin/report.php" class="btn btn-pink">Sales</a>
+            <a href="http://localhost/garden-brew/admin/orders.php" class="btn btn-pink">Orders</a>
         </div>
     </div>
   
