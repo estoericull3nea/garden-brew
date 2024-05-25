@@ -5,6 +5,8 @@ session_start();
 // Get the JSON input
 $data = json_decode(file_get_contents('php://input'), true);
 
+// var_dump($data); exit();
+
 
 // Debugging: Log input data
 file_put_contents('php://stderr', print_r($data, TRUE));
@@ -24,6 +26,12 @@ if ($prod_size == '8') {
     $prod_size = '12oz';
 } else if ($prod_size == '22') {
     $prod_size = '22oz';
+} else if ($prod_size === 'single') {
+    $prod_size = 'Single';
+} else if ($prod_size === 'double') {
+    $prod_size = 'Double';
+} else if ($prod_size === 'bff') {
+    $prod_size = 'BFF';
 } else {
     $prod_size = '22oz';
 }
