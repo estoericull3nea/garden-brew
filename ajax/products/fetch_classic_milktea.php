@@ -1,7 +1,7 @@
 <?php
 require '../../connection/connect.php';
 
-$sql = "SELECT * FROM products WHERE category = 'Classic'";
+$sql = "SELECT * FROM products WHERE category = 'Classic' AND is_available = 1";
 
 $result = $conn->query($sql);
 
