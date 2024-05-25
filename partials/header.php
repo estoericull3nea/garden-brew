@@ -5,7 +5,7 @@
             <span class="fw-semibold text-pink">Garden Brew</span>
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -16,6 +16,9 @@
                 <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/products.php">Products</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/orders.php">Orders</a>
+                </li>
                 <li class="nav-item position-relative">
                     <a class="nav-link position-relative" aria-current="page" href="http://localhost/garden-brew/cart.php">Cart</a>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -23,13 +26,10 @@
                         <span class="visually-hidden">unread messages</span>
                     </span>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/order-status.php">Orders Status/Tracking</a>
-                </li>
             </ul>
             <?php if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) : ?>
                 <div>
-                    <a href="http://localhost/garden-brew/logout.php" class="btn btn-dark">Logout</a>
+                    <a href="http://localhost/garden-brew/logout.php" class="btn btn-pink">Logout</a>
                 </div>
             <?php else : ?>
 

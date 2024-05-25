@@ -13,8 +13,9 @@
 }
 
 .btn-pink:hover {
-  background: #ff70a7b3;
+  background: #ff70a7e1;
   border-color: #ff70a6;
+  color: white;
 }
 
 /* start of custom message */
@@ -45,3 +46,10 @@
   cursor: pointer;
 }
 /* end of custom message */
+
+.text-gradient {
+  background: #ff70a6;
+  background: linear-gradient(to top right, #ff70a6 36%, #dc3545 87%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
