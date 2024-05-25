@@ -18,6 +18,7 @@
                 </li>
                 <li class="nav-item position-relative">
                     <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/orders.php">Orders</a>
+
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                         <span class="smallest" id="count_pending_status"></span>
                         <span class="visually-hidden">unread messages</span>
@@ -26,6 +27,9 @@
                 </li>
                 <li class="nav-item position-relative">
                     <a class="nav-link" aria-current="page" href="http://localhost/garden-brew/cart.php">Cart</a>
+
+
+
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                         <span class="smallest" id="show_count_cart"></span>
                         <span class="visually-hidden">unread messages</span>
@@ -48,6 +52,9 @@
 </nav>
 
 <script>
+
+
+
     function get_total_cart() {
         const xhr = new XMLHttpRequest()
         xhr.open('POST', './ajax/count/count_total_cart.php', true)
@@ -57,11 +64,20 @@
         xhr.send()
     }
 
+    function logged_in() {
+        const logged_in = <?php echo isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true ? 'true' : 'false'; ?>;
+        return logged_in
+    }
+
     function get_pending_status() {
         const xhr = new XMLHttpRequest()
         xhr.open('POST', './ajax/count/count_pending_status.php', true)
         xhr.onload = function() {
-            document.getElementById('count_pending_status').textContent = xhr.responseText
+            if (!logged_in()) {
+                document.getElementById('count_pending_status').textContent = 0
+            } else {
+                document.getElementById('count_pending_status').textContent = xhr.responseText
+            }
         }
         xhr.send()
     }

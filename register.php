@@ -36,54 +36,61 @@ if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) 
 
 
     <div id="customMessage" class="custom-message d-flex align-items-center justify-content-between gap-2 ">
-        <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-normal text-center"></p>
+        <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-semibold text-center"></p>
         <span id="closeButton"></span>
     </div>
 
-    <section class="vh-100">
-        <div class="container-fluid h-custom">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-md-9 col-lg-6 col-xl-5">
+    <section>
+        <div class="container" style="height: 100vh;">
+            <div class="row align-items-center justify-content-center h-100">
+                <div class="col-12 col-md-6 mb-4">
                     <img src="./assets/images/gb_logo-transparent.png" class="img-fluid" alt="Sample image">
                 </div>
-                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <div class="col-12 col-md-6">
                     <form id="form_register" method="POST">
 
-                        <h1 class="fw-bold text-pink">Garden Brew</h1>
+                        <h1 class="fw-bold text-pink mb-3">Register your account</h1>
 
-                        <!-- Email input -->
-                        <div data-mdb-input-init class="form-outline">
-                            <label class="form-label">First Name</label>
-                            <input type="text" class="form-control shadow-none" required name="fname" />
+                        <div class="row">
+                            <div class="col-6">
+                                <!-- Email input -->
+                                <div class="mb-3">
+                                    <label class="form-label ">First Name</label>
+                                    <input type="text" class="form-control shadow-none" required name="fname" />
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <!-- Email input -->
+                                <div class="mb-3">
+                                    <label class="form-label ">Last Name</label>
+                                    <input type="text" class="form-control shadow-none" required name="lname" />
+                                </div>
+
+                            </div>
                         </div>
 
-                        <!-- Email input -->
-                        <div data-mdb-input-init class="form-outline">
-                            <label class="form-label">Last Name</label>
-                            <input type="text" class="form-control shadow-none" required name="lname" />
-                        </div>
 
                         <!-- Email input -->
-                        <div data-mdb-input-init class="form-outline">
-                            <label class="form-label">Username</label>
+                        <div class="mb-3">
+                            <label class="form-label ">Username</label>
                             <input type="text" class="form-control shadow-none" required name="username" />
                         </div>
 
                         <!-- Password input -->
-                        <div data-mdb-input-init class="form-outline mb-3">
-                            <label class="form-label" for="form3Example4">Password</label>
+                        <div class="mb-3 mb-3">
+                            <label class="form-label " for="form3Example4">Password</label>
                             <input type="password" id="form3Example4" class="form-control shadow-none" required name="password" />
                         </div>
 
                         <!-- Phone Number -->
-                        <div data-mdb-input-init class="form-outline">
-                            <label class="form-label">Phone Number</label>
+                        <div class="mb-3">
+                            <label class="form-label ">Phone Number</label>
                             <input type="number" class="form-control shadow-none" required name="phone_number" placeholder="09** *** ****" />
                         </div>
 
                         <!-- Address -->
-                        <div data-mdb-input-init class="form-outline">
-                            <label class="form-label">Address</label>
+                        <div class="mb-3">
+                            <label class="form-label ">Address</label>
                             <input type="text" class="form-control shadow-none" required name="address" placeholder="Full Address" />
                         </div>
 
@@ -116,6 +123,7 @@ if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) 
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const data = xhr.responseText;
+                console.log(data);
                 if (data === 'Username already registered') {
                     display_custom_toast('Username already registered', 'danger', 3000)
                 } else if (data === '1') {

@@ -12,7 +12,10 @@ $lname = $data['lname'] ?? '';
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die(json_encode([
+        'status' => 'error',
+        'message' => 'Connection failed: ' . $conn->connect_error
+    ]));
 }
 
 // Check if the username already exists
@@ -20,7 +23,10 @@ $sql = "SELECT COUNT(*) as count FROM users WHERE username = ?";
 $stmt = $conn->prepare($sql);
 
 if ($stmt === false) {
-    die("Prepare failed: " . $conn->error);
+    die(json_encode([
+        'status' => 'error',
+        'message' => 'Prepare failed: ' . $conn->error
+    ]));
 }
 
 $stmt->bind_param("s", $username);
@@ -30,37 +36,41 @@ $row = $result->fetch_assoc();
 $stmt->close();
 
 if ($row['count'] > 0) {
-    echo 'Username already registered';
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Username already registered'
+    ]);
     exit();
-} else {
-    // Insert new user into the database
-    $sql = "INSERT INTO users (fname, lname, username, password, phone_number, address) VALUES (?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-
-    if ($stmt === false) {
-        die("Prepare failed: " . $conn->error);
-    }
-
-    // Hash the password before storing it
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-    $stmt->bind_param("ssssss", $fname, $lname, $username, $hashed_password, $phone_number, $address);
-    if ($stmt->execute()) {
-        echo '1';
-    } else {
-        $response = [
-            'status' => 'error',
-            'message' => 'Failed to register user: ' . $stmt->error
-        ];
-    }
-
-    $stmt->close();
 }
 
-// Close connection
+// Insert new user into the database
+$sql = "INSERT INTO users (fname, lname, username, password, phone_number, address) VALUES (?, ?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+
+if ($stmt === false) {
+    die(json_encode([
+        'status' => 'error',
+        'message' => 'Prepare failed: ' . $conn->error
+    ]));
+}
+
+// Hash the password before storing it
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+$stmt->bind_param("ssssss", $fname, $lname, $username, $hashed_password, $phone_number, $address);
+if ($stmt->execute()) {
+    session_start();
+    $_SESSION['user_id'] = $stmt->insert_id; // Assuming `user_id` is an auto-increment field
+    $_SESSION['user_logged_in'] = true;
+    $_SESSION['user'] = $username;
+    echo '1';
+} else {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Failed to register user: ' . $stmt->error
+    ]);
+}
+
+$stmt->close();
 $conn->close();
-
-// Set content type to JSON
-header('Content-Type: application/json');
-
-// Return JSON response
+?>
