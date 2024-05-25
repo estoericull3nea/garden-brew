@@ -14,7 +14,19 @@ $user_id = $data['user_id'];
 $prod_id = $data['prod_id'];
 $prod_name = $data['prod_name'];
 $prod_price = $data['prod_price'];
-$prod_size = $data['prod_size'] === '16' ? '16oz' : '22oz';
+// $prod_size = $data['prod_size'] == '16' ? '16oz' : '22oz';
+$prod_size = $data['prod_size'];
+if ($prod_size == '8') {
+    $prod_size = '8oz';
+} else if ($prod_size == '16') {
+    $prod_size = '16oz';
+} else if ($prod_size == '12') {
+    $prod_size = '12oz';
+} else if ($prod_size == '22') {
+    $prod_size = '22oz';
+} else {
+    $prod_size = '22oz';
+}
 $prod_total = $data['prod_total'];
 $prod_catagory = $data['prod_category'];
 $prod_qty = $data['prod_qty'];

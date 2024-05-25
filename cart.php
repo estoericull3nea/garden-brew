@@ -28,9 +28,6 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             <table class="table text-center align-middle">
                 <thead>
                     <tr>
-                        <th scope="col">Customer Name</th>
-                        <th scope="col">Customer Number</th>
-                        <th scope="col">Customer Address</th>
                         <th scope="col">Product Name</th>
                         <th scope="col">Product Quantity</th>
                         <th scope="col">Product Size</th>
@@ -88,9 +85,6 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                     const prod_img_path = cart.category === 'Classic' ? 'classic' : cart.category === 'Special' ? 'special' : cart.category === 'Premium' ? 'premium' : cart.category === 'Hot' ? 'hot' : '';
                     const cart_item = `
                         <tr>
-                            <td>${cart.fname} ${cart.lname}</td>
-                            <td>${cart.address}</td>
-                            <td>${cart.phone_number}</td>
                             <td>${cart.prod_name}</td>
                             <td>
                                 <div class="d-flex justify-content-center align-items-center">
