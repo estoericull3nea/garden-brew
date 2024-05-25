@@ -66,8 +66,13 @@
 }
 
 /* quantity */
-.btn:hover {
-  background-color: #ff70a6;
+.qty {
+  border-color: #ff70a6;
+  background: transparent !important;
+  
+}
+.qty:hover {
+  background-color: #ff70a6 !important;
   border-color: #ff70a6;
 }
 /* quantity */

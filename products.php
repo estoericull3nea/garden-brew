@@ -191,9 +191,9 @@ session_start();
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center mb-2">
-                                        <button type="button" class="btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
-                                        <input readonly type="number" name="quantity" class="form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
-                                        <button type="button" class="btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
+                                        <button type="button" class="qty btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
+                                        <input readonly type="number" name="quantity" class="qty form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
+                                        <button type="button" class="qty btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
                                     </div>
                                     <button type="submit" class="btn btn-pink mt-2">Add to cart</button>
                                 </form>
@@ -241,9 +241,9 @@ session_start();
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center mb-2">
-                                        <button type="button" class="btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
-                                        <input readonly type="number" name="quantity" class="form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
-                                        <button type="button" class="btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
+                                        <button type="button" class="qty btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
+                                        <input readonly type="number" name="quantity" class="qty form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
+                                        <button type="button" class="qty btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
                                     </div>
                                     <button type="submit" class="btn btn-pink mt-2">Add to cart</button>
                                 </form>
@@ -290,9 +290,9 @@ session_start();
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center mb-2">
-                                        <button type="button" class="btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
-                                        <input readonly type="number" name="quantity" class="form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
-                                        <button type="button" class="btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
+                                        <button type="button" class="qty btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
+                                        <input readonly type="number" name="quantity" class="qty form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
+                                        <button type="button" class="qty btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
                                     </div>
                                     <button type="submit" class="btn btn-pink mt-2">Add to cart</button>
                                 </form>
@@ -342,9 +342,9 @@ session_start();
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center mb-2">
-                                        <button type="button" class="btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
-                                        <input readonly type="number" name="quantity" class="form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
-                                        <button type="button" class="btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
+                                        <button type="button" class="qty btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
+                                        <input readonly type="number" name="quantity" class="qty form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
+                                        <button type="button" class="qty btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
                                     </div>
                                     <button type="submit" class="btn btn-pink mt-2">Add to cart</button>
                                 </form>
@@ -648,9 +648,9 @@ session_start();
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center mb-2">
-                                        <button type="button" class="btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
-                                        <input readonly type="number" name="quantity" class="form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
-                                        <button type="button" class="btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
+                                        <button type="button" class="qty btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
+                                        <input readonly type="number" name="quantity" class="qty form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
+                                        <button type="button" class="qty btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
                                     </div>
                                     <button type="submit" class="btn btn-pink mt-2">Add to cart</button>
                                 </form>
@@ -761,9 +761,9 @@ session_start();
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center mb-2">
-                                        <button type="button" class="btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
-                                        <input readonly type="number" name="quantity" class="form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
-                                        <button type="button" class="btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
+                                        <button type="button" class="qty btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
+                                        <input readonly type="number" name="quantity" class="qty form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
+                                        <button type="button" class="qty btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
                                     </div>
                                     <button type="submit" class="btn btn-pink mt-2">Add to cart</button>
                                 </form>

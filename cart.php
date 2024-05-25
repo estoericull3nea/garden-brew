@@ -54,9 +54,25 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                         <option value="gcash">GCash</option>
                     </select>
                 </div>
-                <button id="orderButton" class="btn btn-pink" onclick="order_now()">Order It Now</button>
+                <button id="orderButton" class="btn btn-pink"  data-bs-toggle="modal" data-bs-target="#order_now_modal">Order It Now</button>
             </div>
 
+        </div>
+    </div>
+
+
+    <!-- Modal Confirmation-->
+    <div class="modal fade" id="order_now_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="order_now_modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Are you sure to order now?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-dark" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-sm btn-pink" id="order_now" onclick="order_now()">Order Now</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -89,9 +105,9 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                             <td>${cart.prod_name}</td>
                             <td>
                                 <div class="d-flex justify-content-center align-items-center">
-                                    <button class="btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.prod_qty - 1})">-</button>
-                                    <input type="number" value="${cart.prod_qty}" min="1" class="form-control mx-2" style="width: 60px; text-align: center;" disabled>
-                                    <button class="btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.prod_qty + 1})">+</button>
+                                    <button class="qty btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.prod_qty - 1})">-</button>
+                                    <input type="number" value="${cart.prod_qty}" min="1" class="qty form-control mx-2" style="width: 60px; text-align: center;" disabled>
+                                    <button class="qty btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.prod_qty + 1})">+</button>
                                 </div>
                             </td>
                             <td>${cart.prod_size}</td>
@@ -108,12 +124,12 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 })
                 // Add the total price row
                 const total_row = `
-            <tr>
-                <td colspan="6" class="text-end fw-bold">Total:</td>
-                <td class="fw-bold">${totalPrice.toFixed(2)}</td>
-                <td></td>
-            </tr>
-        `;
+                                <tr>
+                                    <td colspan="6" class="text-end fw-bold">Total:</td>
+                                    <td class="fw-bold">${totalPrice.toFixed(2)}</td>
+                                    <td></td>
+                                </tr>
+                            `;
                 table_show_cart.innerHTML += total_row;
             }
             xhr.send()
@@ -171,6 +187,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 paymentMode
             }));
         }
+
+      
 
         addEventListener("DOMContentLoaded", () => {
             fetch_cart()
