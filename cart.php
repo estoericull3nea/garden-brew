@@ -46,7 +46,6 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 <button class="btn btn-pink">Order it now!</button>
             </div> -->
 
-
             <div class="d-flex flex-column align-items-end gap-3 mt-4 mb-5">
                 <div>
                     <label for="paymentMode" class="fw-medium">Select Mode of Payment:</label>
@@ -72,6 +71,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 const data = JSON.parse(xhr.responseText)
                 const table_show_cart = document.getElementById('table_show_cart')
                 table_show_cart.innerHTML = ''
+
+                let totalPrice = 0;
 
                 if (data.length === 0) {
                     paymentMode.disabled = true;
@@ -103,7 +104,17 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                         </tr>
                     `
                     table_show_cart.innerHTML += cart_item
+                    totalPrice += parseFloat(cart.prod_total);
                 })
+                // Add the total price row
+                const total_row = `
+            <tr>
+                <td colspan="6" class="text-end fw-bold">Total:</td>
+                <td class="fw-bold">${totalPrice.toFixed(2)}</td>
+                <td></td>
+            </tr>
+        `;
+                table_show_cart.innerHTML += total_row;
             }
             xhr.send()
         }

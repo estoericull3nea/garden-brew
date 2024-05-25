@@ -8,7 +8,8 @@ $user_id = $_SESSION['user_id'];
 
 
 // Prepare the SQL statement
-$sql = "SELECT 
+$sql = "
+SELECT 
 cart.*, 
 users.fname, 
 users.lname, 
@@ -21,7 +22,8 @@ users
 ON 
 cart.user_id = users.user_id 
 WHERE 
-cart.user_id = ?";
+cart.user_id = ?
+";
 
 $stmt = $conn->prepare($sql);
 
