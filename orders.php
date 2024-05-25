@@ -17,6 +17,12 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
 <body>
     <?php require './partials/header.php'; ?>
 
+
+    <div id="customMessage" class="custom-message d-flex align-items-center justify-content-between gap-2 ">
+        <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-semibold text-center"></p>
+        <span id="closeButton"></span>
+    </div>
+
     <!-- Modal view items-->
     <div class="modal fade" id="modal_view_items" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal_view_itemsLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -37,22 +43,28 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
         <div class="mt-5 ">
             <nav class="d-flex justify-content-center ">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pending</button>
-                    <button class="nav-link " id="nav-approved-tab" data-bs-toggle="tab" data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Approved</button>
-                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">On Going</button>
-                    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Delivered</button>
+                    <button class="nav-link active" id="nav-pending-tab" data-bs-toggle="tab" data-bs-target="#nav-pending" type="button" role="tab" aria-controls="nav-pending" aria-selected="true">Pending</button>
+                    <button class="nav-link " id="nav-approved-tab" data-bs-toggle="tab" data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-pending" aria-selected="true">Approved</button>
+                    <button class="nav-link" id="nav-going-tab" data-bs-toggle="tab" data-bs-target="#nav-going" type="button" role="tab" aria-controls="nav-going" aria-selected="false">On Going</button>
+                    <button class="nav-link" id="nav-delivered-tab" data-bs-toggle="tab" data-bs-target="#nav-delivered" type="button" role="tab" aria-controls="nav-delivered" aria-selected="false">Delivered</button>
+                    <button class="nav-link" id="nav-canceled-tab" data-bs-toggle="tab" data-bs-target="#nav-canceled" type="button" role="tab" aria-controls="nav-canceled" aria-selected="false">Canceled</button>
 
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
-                    <div class="mt-5 text-center row" id="card_container">
+                <div class="tab-pane fade show active" id="nav-pending" role="tabpanel" aria-labelledby="nav-pending-tab" tabindex="0">
+                    <div class="mt-5 text-center row" id="pending_card_container">
 
                     </div>
                 </div>
                 <div class="tab-pane fade " id="nav-approved" role="tabpanel" aria-labelledby="nav-approved-tab" tabindex="0">...</div>
-                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">...</div>
-                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">...</div>
+                <div class="tab-pane fade" id="nav-going" role="tabpanel" aria-labelledby="nav-going-tab" tabindex="0">...</div>
+                <div class="tab-pane fade" id="nav-delivered" role="tabpanel" aria-labelledby="nav-delivered-tab" tabindex="0">...</div>
+                <div class="tab-pane fade" id="nav-canceled" role="tabpanel" aria-labelledby="nav-canceled-tab" tabindex="0">
+                    <div class="mt-5 text-center row" id="canceled_card_container">
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -65,14 +77,13 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText)
 
-                const card_container = document.getElementById('card_container')
-                card_container.innerHTML = ''
+                const pending_card_container = document.getElementById('pending_card_container')
+                pending_card_container.innerHTML = ''
 
                 data.forEach(product => {
-                    console.log(product);
                     const order_card = `
-                        <div class="col-3">
-                            <div class="card" style="width: 18rem;">
+                        <div class="col-12 col-md-6 col-lg-4  mb-4">
+                            <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Order ID: ${product.order_id}</h5>
                                     <h5 class="card-title">Status: ${product.status}</h5>
@@ -88,14 +99,73 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                                     <li class="list-group-item"><span class="fw-semibold">Orde Date:</span> ${formatDateTime(product.order_date)}</li>
                                 </ul>
                                 <div class="card-body">
-                                    <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items">View Items</a>
-                                    <a href="#" class="btn btn-sm btn-danger card-link">Cancel Order</a>
+                                    <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
+                                    <a href="#" class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</a>
                                 </div>
                             </div>
                         </div>
 
                     `;
-                    card_container.innerHTML += order_card;
+                    pending_card_container.innerHTML += order_card;
+                });
+            }
+            xhr.send()
+        }
+
+        function mark_as_cancel(order_id) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/order/mark_as_cancel.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.responseText === '1') {
+                    fetch_pending_orders()
+                    fetch_canceled_orders()
+                    display_custom_toast('Canceled Successfully', 'success', 2000)
+                }
+            }
+            xhr.send(JSON.stringify({
+                order_id
+            }))
+        }
+
+        function fetch_canceled_orders() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/order/fetch_canceled_order.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                const data = JSON.parse(xhr.responseText)
+
+                const canceled_card_container = document.getElementById('canceled_card_container')
+                canceled_card_container.innerHTML = ''
+
+                data.forEach(product => {
+                    console.log(product);
+                    const order_card = `
+                        <div class="col-12 col-md-6 col-lg-4  mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Order ID: ${product.order_id}</h5>
+                                    <h5 class="card-title">Status: ${product.status}</h5>
+                                    <!-- <p class="card-text">
+                                        <span class="fw-semibold">Notes:</span> <br>
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum rem enim officiis voluptate natus asperiores qui, suscipit voluptates? Temporibus cupiditate deleniti, soluta laborum corrupti hic! Quisquam hic ea deserunt veniam.
+                                    </p> -->
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><span class="fw-semibold">Customer Name:</span> ${product.fname} ${product.lname}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Customer Address:</span> ${product.address}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Customer Phone Number:</span> ${product.phone_number}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Ordered:</span> ${formatDateTime(product.order_date)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Canceled:</span> ${formatDateTime(product.canceled_at)}</li>
+                                </ul>
+                                <div class="card-body">
+                                    <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    `;
+                    canceled_card_container.innerHTML += order_card;
                 });
             }
             xhr.send()
@@ -104,6 +174,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
 
         addEventListener("DOMContentLoaded", () => {
             fetch_pending_orders()
+            fetch_canceled_orders()
         })
     </script>
 </body>
