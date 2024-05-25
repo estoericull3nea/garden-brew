@@ -30,8 +30,10 @@ if ($prod_size == '8') {
     $prod_size = 'Single';
 } else if ($prod_size === 'double') {
     $prod_size = 'Double';
-} else if ($prod_size === 'bff') {
-    $prod_size = 'BFF';
+} else if ($prod_size === 'double') {
+    $prod_size = 'Double';
+} else if ($prod_size === 'solo') {
+    $prod_size = 'Solo';
 } else {
     $prod_size = '22oz';
 }

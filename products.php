@@ -131,18 +131,24 @@ session_start();
                 <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
                     <div class="d-flex align-items-start">
                         <div class="nav flex-column nav-pills me-3" style="min-width: 200px;" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">French Fries</button>
-                            <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Pizza</button>
+                            <button class="nav-link active" id="v-pills-Fries-tab" data-bs-toggle="pill" data-bs-target="#v-pills-fries" type="button" role="tab" aria-controls="v-pills-fries" aria-selected="true">French Fries</button>
+                            <button class="nav-link" id="v-pills-pizza-tab" data-bs-toggle="pill" data-bs-target="#v-pills-pizza" type="button" role="tab" aria-controls="v-pills-pizza" aria-selected="false">Pizza</button>
                         </div>
                         <div class="tab-content" id="v-pills-tabContent">
-                            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+                            <div class="tab-pane fade show active" id="v-pills-fries" role="tabpanel" aria-labelledby="v-pills-Fries-tab" tabindex="0">
                                 <div class="french_fries_container">
                                     <div>
                                         <div class="row" id="french_fries"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">...</div>
+                            <div class="tab-pane fade" id="v-pills-pizza" role="tabpanel" aria-labelledby="v-pills-pizza-tab" tabindex="0">
+                                <div class="pizza_container">
+                                    <div>
+                                        <div class="row" id="pizza"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -617,7 +623,6 @@ session_start();
 
                 const data = JSON.parse(xhr.responseText);
                 data.forEach(product => {
-                    console.log(product);
                     const product_card = `
                     <div class="col-12 col-md-6 col-xl-4 mb-3">
                         <div class="card" role="button">
@@ -707,9 +712,6 @@ session_start();
                     get_total_cart();
                     display_custom_toast('Added to Cart', 'success', 2000);
                 }
-
-                console.log(xhr.responseText);
-
             };
             xhr.send(JSON.stringify({
                 prod_id,
@@ -724,12 +726,125 @@ session_start();
             }));
         }
 
+        function fetch_pizzas() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/products/fetch_pizzas.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                const pizza = document.getElementById('pizza');
+                pizza.innerHTML = '';
+
+                const data = JSON.parse(xhr.responseText);
+                data.forEach(product => {
+                    console.log(product);
+                    const product_card = `
+                    <div class="col-12 col-md-6 col-xl-4 mb-3">
+                        <div class="card" role="button">
+                            <img src="./assets/images/milktea/other/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-semibold">${product.prod_name}</h5>
+                                <p class="card-category fw-semibold">${product.category}</p>
+                                <p class="card-text smaller">${product.prod_desc}</p>
+                                <form onsubmit="add_cartPizza(event, '${product.prod_id}', this)" method="POST" data-prod-img="${product.prod_img}">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="mb-2">
+                                                <label for="size-${product.prod_id}" class="form-label smaller">Select size</label>
+                                                <select id="size-${product.prod_id}" name="size" class="form-select shadow-none smaller" role="button" onchange="updatePricePizza('${product.prod_id}')">
+                                                    <option role="button" value="solo">Solo</option>
+                                                    <option role="button" value="bff">BFF</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 my-2">
+                                            <p class="card-text fw-medium" id="price-${product.prod_id}">${product.prod_price == 0 ? '79' : product.prod_price} Pesos</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <button type="button" class="btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
+                                        <input readonly type="number" name="quantity" class="form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
+                                        <button type="button" class="btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
+                                    </div>
+                                    <button type="submit" class="btn btn-pink mt-2">Add to cart</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    `;
+                    pizza.innerHTML += product_card;
+                });
+            };
+            xhr.send();
+        }
+
+        function updatePricePizza(productId) {
+            const sizeSelect = document.getElementById(`size-${productId}`);
+            const priceElement = document.getElementById(`price-${productId}`);
+            const selectedSize = sizeSelect.value;
+
+            let newPrice;
+            if (selectedSize === 'solo') {
+                newPrice = 79;
+            } else {
+                newPrice = 149;
+            }
+            priceElement.textContent = `${newPrice} Pesos`;
+        }
+
+        function add_cartPizza(event, prod_id, form) {
+
+            event.preventDefault();
+
+            const login = <?php echo (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) ? 'true' : 'false'; ?>;
+            if (login === false) {
+                display_custom_toast('Please Login or Register first', 'danger', 2000);
+                setTimeout(() => {
+                    window.location.href = "http://localhost/garden-brew/login.php"
+                }, 2000);
+                return
+            }
+
+            const user_id = <?= json_encode($_SESSION['user_id']); ?>;
+            const prod_name = form.closest('.card-body').querySelector('.card-title').textContent;
+            const prod_category = form.closest('.card-body').querySelector('.card-category').textContent;
+            const size = form.querySelector('select[name="size"]').value;
+            const quantity = form.querySelector('input[name="quantity"]').value;
+            const price = size === 'solo' ? 79 : size === 'bff' ? 149 : '';
+            const prod_total = price * quantity;
+            const prod_img = form.getAttribute('data-prod-img');
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/cart/add_to_cart.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.responseText === '1') {
+                    form.reset();
+                    get_total_cart();
+                    display_custom_toast('Added to Cart', 'success', 2000);
+                }
+            };
+            xhr.send(JSON.stringify({
+                prod_id,
+                user_id,
+                prod_name,
+                prod_category,
+                prod_price: price,
+                prod_size: size,
+                prod_total,
+                prod_qty: quantity,
+                prod_img // Include the product image in the JSON payload
+            }));
+        }
+
+
         addEventListener("DOMContentLoaded", () => {
             fetch_classic_milktea()
             fetch_special_milktea()
             fetch_premium_milktea()
             fetch_hot_coffee()
             fetch_french_fries()
+            fetch_pizzas()
         });
     </script>
 </body>
