@@ -1,36 +1,31 @@
 <?php
+session_start();
 require '../../connection/connect.php';
 
-session_start();
-
+// Get the user_id from session
 $user_id = $_SESSION['user_id'];
-$sql = "
-SELECT 
-cart.user_id, 
-cart.prod_id, 
-cart.qty, 
-cart.cart_id,
-products.prod_name, 
-products.prod_price, 
-products.prod_img,
-users.fname,
-users.lname,
-(cart.qty * products.prod_price) AS total_price
-FROM cart 
-INNER JOIN products ON cart.prod_id = products.prod_id 
-INNER JOIN users ON cart.user_id = users.user_id
-WHERE cart.user_id = ?
-";
 
+
+
+// Prepare the SQL statement
+$sql = "SELECT 
+cart.*, 
+users.fname, 
+users.lname, 
+users.phone_number, 
+users.address 
+FROM 
+cart 
+JOIN 
+users 
+ON 
+cart.user_id = users.user_id 
+WHERE 
+cart.user_id = ?";
 
 $stmt = $conn->prepare($sql);
 
-// Check if preparation was successful
-if ($stmt === false) {
-    die("Prepare failed: " . $conn->error);
-}
-
-// Bind parameters
+// Bind the parameters
 $stmt->bind_param("i", $user_id);
 
 // Execute the statement
@@ -40,14 +35,13 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 // Fetch all rows
-$cart = $result->fetch_all(MYSQLI_ASSOC);
+$data = $result->fetch_all(MYSQLI_ASSOC);
 
-// Close statement and connection
+// Close the statement and connection
 $stmt->close();
 $conn->close();
 
-// Set content type to JSON
+// Return the result in JSON format
 header('Content-Type: application/json');
-
-// Return JSON response
-echo json_encode($cart);
+echo json_encode($data);
+?>

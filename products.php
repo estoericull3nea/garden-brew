@@ -56,7 +56,8 @@ session_start();
         }
 
         input[type=number] {
-            -moz-appearance: textfield; /* Firefox */
+            -moz-appearance: textfield;
+            /* Firefox */
         }
     </style>
 </head>
@@ -139,7 +140,7 @@ session_start();
                             <div class="card-body">
                                 <h5 class="card-title fw-semibold">${product.prod_name}</h5>
                                 <p class="card-text smaller">${product.prod_desc}</p>
-                                <form onsubmit="add_cart(event, '${product.prod_id}', this)" method="POST">
+                                <form onsubmit="add_cart(event, '${product.prod_id}', this)" method="POST" data-prod-img="${product.prod_img}">
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="mb-2">
@@ -164,6 +165,7 @@ session_start();
                             </div>
                         </div>
                     </div>
+
                     `;
                     classic_milktea.innerHTML += product_card;
                 });
@@ -180,6 +182,7 @@ session_start();
             const quantity = form.querySelector('input[name="quantity"]').value;
             const price = size === '16' ? 39 : 49;
             const prod_total = price * quantity;
+            const prod_img = form.getAttribute('data-prod-img'); 
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './ajax/cart/add_to_cart.php', true);
@@ -198,9 +201,11 @@ session_start();
                 prod_price: price,
                 prod_size: size,
                 prod_total,
-                prod_qty: quantity
+                prod_qty: quantity,
+                prod_img // Include the product image in the JSON payload
             }));
         }
+
 
         function decrease_quantity(button) {
             const input = button.nextElementSibling;

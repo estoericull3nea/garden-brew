@@ -85,14 +85,14 @@ session_start();
                             <td>${cart.prod_name}</td>
                             <td>
                                 <div class="d-flex justify-content-center align-items-center">
-                                    <button class="btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.qty - 1})">-</button>
-                                    <input type="number" value="${cart.qty}" min="1" class="form-control mx-2" style="width: 60px; text-align: center;" disabled>
-                                    <button class="btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.qty + 1})">+</button>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.prod_qty - 1})">-</button>
+                                    <input type="number" value="${cart.prod_qty}" min="1" class="form-control mx-2" style="width: 60px; text-align: center;" disabled>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.prod_qty + 1})">+</button>
                                 </div>
                             </td>
                             <td>${cart.prod_price}</td>
                             <td><img src="./assets/images/milktea/classic/${cart.prod_img}" style="height: 90px; width: 90px;"></td>
-                            <td>${cart.total_price}</td>
+                            <td>${cart.prod_total}</td>
                             <td>
                                 <button class="btn btn-sm btn-pink" onclick="remove_cart(${cart.cart_id})">Remove</button>
                             </td>
