@@ -19,7 +19,7 @@
                 <li class="nav-item position-relative">
                     <a class="nav-link " aria-current="page" href="http://localhost/garden-brew/orders.php">Orders</a>
 
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    <span class="position-absolute  start-100 translate-middle badge rounded-pill bg-danger" style="top: 8px;">
                         <span class="smallest" id="count_pending_status"></span>
                         <span class="visually-hidden">unread messages</span>
                     </span>
@@ -30,7 +30,7 @@
 
 
 
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger" style="top: 8px;">
                         <span class="smallest" id="show_count_cart"></span>
                         <span class="visually-hidden">unread messages</span>
                     </span>

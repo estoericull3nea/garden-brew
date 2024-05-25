@@ -14,6 +14,11 @@ session_start();
 <body>
     <?php require './partials/header.php'; ?>
 
+    <div id="customMessage" class="custom-message d-flex align-items-center justify-content-between gap-2 ">
+        <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-semibold text-center"></p>
+        <span id="closeButton"></span>
+    </div>
+
     <!-- <div class="carousel">
         <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -58,6 +63,11 @@ session_start();
         </div>
     </div>
 
+
+    <script>
+     
+
+    </script>
 
 </body>
 
