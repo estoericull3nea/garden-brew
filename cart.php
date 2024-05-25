@@ -177,6 +177,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 if (response.status === 'success') {
                     display_custom_toast('Order placed successfully', 'success', 3000);
                     fetch_cart();
+                    get_total_cart()
+                    hideModal('order_now_modal')
                 } else {
                     display_custom_toast('Failed to place order: ' + response.message, 'error', 2000);
                 }

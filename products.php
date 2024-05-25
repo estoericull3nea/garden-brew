@@ -736,7 +736,6 @@ session_start();
 
                 const data = JSON.parse(xhr.responseText);
                 data.forEach(product => {
-                    console.log(product);
                     const product_card = `
                     <div class="col-12 col-md-6 col-xl-4 mb-3">
                         <div class="card" role="button">
