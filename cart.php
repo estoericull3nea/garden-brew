@@ -85,7 +85,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 }
 
                 data.forEach(cart => {
-                    const prod_img_path = cart.category === 'Classic' ? 'classic' : cart.category === 'Special' ? 'special' : cart.category === 'Premium' ? 'premium' : '';
+                    const prod_img_path = cart.category === 'Classic' ? 'classic' : cart.category === 'Special' ? 'special' : cart.category === 'Premium' ? 'premium' : cart.category === 'Hot' ? 'hot' : '';
                     const cart_item = `
                         <tr>
                             <td>${cart.fname} ${cart.lname}</td>

@@ -121,7 +121,13 @@ session_start();
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">Hot Coffee</div>
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+                    <div class="hot_coffee_container">
+                        <div>
+                            <div class="row" id="hot_coffee"></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">Other</div>
             </div>
         </div>
@@ -273,6 +279,56 @@ session_start();
 
                     `;
                     premium_milktea.innerHTML += product_card;
+                });
+            };
+            xhr.send();
+        }
+
+        function fetch_hot_coffee() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/products/fetch_hot_coffee.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                const hot_coffee = document.getElementById('hot_coffee');
+                hot_coffee.innerHTML = '';
+
+                const data = JSON.parse(xhr.responseText)
+
+                data.forEach(product => {
+                    const product_card = `
+                    <div class="col-12 col-md-6 col-xl-4 mb-3">
+                        <div class="card" role="button">
+                            <img src="./assets/images/milktea/hot/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-semibold">${product.prod_name}</h5>
+                                <p class="card-category fw-semibold">${product.category}</p>
+                                <p class="card-text smaller">${product.prod_desc}</p>
+                                <form onsubmit="add_cart_premium_milktea(event, '${product.prod_id}', this)" method="POST" data-prod-img="${product.prod_img}">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="mb-2">
+                                                <select id="size-${product.prod_id}" disabled name="size" class="form-select shadow-none smaller" role="button" onchange="updatePriceForSpecial('${product.prod_id}')">
+                                                    <option role="button" value="79">22oz</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 my-2">
+                                            <p class="card-text fw-medium" id="price-${product.prod_id}">${product.prod_price == 0 ? '49' : product.prod_price} Pesos</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <button type="button" class="btn btn-outline-pink" onclick="decrease_quantity(this)">-</button>
+                                        <input readonly type="number" name="quantity" class="form-control mx-2 shadow-none" value="1" min="1" style="width: 60px; text-align: center; border-color: #ff70a6; -moz-appearance: textfield;">
+                                        <button type="button" class="btn btn-outline-pink" onclick="increase_quantity(this)">+</button>
+                                    </div>
+                                    <button type="submit" class="btn btn-pink mt-2">Add to cart</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    `;
+                    hot_coffee.innerHTML += product_card;
                 });
             };
             xhr.send();
@@ -460,6 +516,7 @@ session_start();
             fetch_classic_milktea()
             fetch_special_milktea()
             fetch_premium_milktea()
+            fetch_hot_coffee();
         });
     </script>
 </body>
