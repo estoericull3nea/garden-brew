@@ -1,6 +1,9 @@
 <?php
 session_start();
-
+if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true)) {
+    header("Location: http://localhost/garden-brew/login.php");
+    exit(); // Always call exit after header to stop further execution
+}
 ?>
 
 <!DOCTYPE html>
@@ -26,8 +29,11 @@ session_start();
                 <thead>
                     <tr>
                         <th scope="col">Customer Name</th>
+                        <th scope="col">Customer Number</th>
+                        <th scope="col">Customer Address</th>
                         <th scope="col">Product Name</th>
-                        <th scope="col">Quantity</th>
+                        <th scope="col">Product Quantity</th>
+                        <th scope="col">Product Size</th>
                         <th scope="col">Product Price</th>
                         <th scope="col">Product Image</th>
                         <th scope="col">Total Price</th>
@@ -79,9 +85,12 @@ session_start();
                 }
 
                 data.forEach(cart => {
+                    console.log(cart);
                     const cart_item = `
                         <tr>
                             <td>${cart.fname} ${cart.lname}</td>
+                            <td>${cart.address}</td>
+                            <td>${cart.phone_number}</td>
                             <td>${cart.prod_name}</td>
                             <td>
                                 <div class="d-flex justify-content-center align-items-center">
@@ -90,6 +99,7 @@ session_start();
                                     <button class="btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.prod_qty + 1})">+</button>
                                 </div>
                             </td>
+                            <td>${cart.prod_size}</td>
                             <td>${cart.prod_price}</td>
                             <td><img src="./assets/images/milktea/classic/${cart.prod_img}" style="height: 90px; width: 90px;"></td>
                             <td>${cart.prod_total}</td>

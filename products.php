@@ -174,7 +174,19 @@ session_start();
         }
 
         function add_cart(event, prod_id, form) {
+
+
+
             event.preventDefault();
+
+            const login = <?php echo (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) ? 'true' : 'false'; ?>;
+            if(login === false) {
+                display_custom_toast('Please Login or Register first', 'danger', 2000);
+                setTimeout(() => {
+                    window.location.href = "http://localhost/garden-brew/login.php"
+                }, 2000);
+                return
+            }
 
             const user_id = <?= json_encode($_SESSION['user_id']); ?>;
             const prod_name = form.closest('.card-body').querySelector('.card-title').textContent;
