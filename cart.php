@@ -42,9 +42,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 </tbody>
             </table>
 
-            <!-- <div class="text-end mt-4">
-                <button class="btn btn-pink">Order it now!</button>
-            </div> -->
+     
 
             <div class="d-flex flex-column align-items-end gap-3 mt-4 mb-5">
                 <div>
@@ -54,7 +52,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                         <option value="gcash">GCash</option>
                     </select>
                 </div>
-                <button id="orderButton" class="btn btn-pink"  data-bs-toggle="modal" data-bs-target="#order_now_modal">Order It Now</button>
+                <button id="orderButton" class="btn btn-pink" data-bs-toggle="modal" data-bs-target="#order_now_modal">Order It Now</button>
             </div>
 
         </div>
@@ -180,15 +178,16 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                     display_custom_toast('Order placed successfully', 'success', 3000);
                     fetch_cart();
                 } else {
-                    display_custom_toast('Failed to place order', 'error', 2000);
+                    display_custom_toast('Failed to place order: ' + response.message, 'error', 2000);
                 }
             };
             xhr.send(JSON.stringify({
-                paymentMode
+                paymentMode: paymentMode
             }));
         }
 
-      
+
+
 
         addEventListener("DOMContentLoaded", () => {
             fetch_cart()

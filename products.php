@@ -770,7 +770,6 @@ session_start();
                             </div>
                         </div>
                     </div>
-
                     `;
                     pizza.innerHTML += product_card;
                 });

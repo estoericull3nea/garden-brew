@@ -3,139 +3,69 @@ session_start();
 require '../../connection/connect.php';
 
 $user_id = $_SESSION['user_id'];
+
+// Get the JSON input
 $data = json_decode(file_get_contents('php://input'), true);
+
+// Extract payment mode
 $payment_mode = $data['paymentMode'];
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Fetch all cart items for the user
+$sql_fetch_cart = "SELECT * FROM cart WHERE user_id = ?";
+$stmt_fetch_cart = $conn->prepare($sql_fetch_cart);
+$stmt_fetch_cart->bind_param("i", $user_id);
+$stmt_fetch_cart->execute();
+$result_fetch_cart = $stmt_fetch_cart->get_result();
 
-try {
-    // Start transaction
+if ($result_fetch_cart->num_rows > 0) {
+    // Begin transaction
     $conn->begin_transaction();
 
-    // Fetch the user's first name
-    $sql = "SELECT fname, lname, phone_number, address FROM users WHERE user_id = ?";
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        throw new Exception("Prepare failed: " . $conn->error);
-    }
+    try {
+        // Insert order details into orders table
+        $sql_insert_order = "INSERT INTO orders (user_id, payment_mode) VALUES (?, ?)";
+        $stmt_insert_order = $conn->prepare($sql_insert_order);
+        $stmt_insert_order->bind_param("is", $user_id, $payment_mode);
+        $stmt_insert_order->execute();
+        
+        // Get the last inserted order_id
+        $order_id = $stmt_insert_order->insert_id;
 
-    $stmt->bind_param("i", $user_id);
-    if (!$stmt->execute()) {
-        throw new Exception("Failed to fetch user details: " . $stmt->error);
-    }
+        // Insert each cart item into order_items table
+        $sql_insert_order_items = "INSERT INTO order_items (order_id, prod_id, prod_name, prod_price, prod_size, prod_qty, prod_total, prod_img, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt_insert_order_items = $conn->prepare($sql_insert_order_items);
 
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-    $fname = $user['fname'];
-    $lname = $user['lname'];
-    $phone_number = $user['phone_number'];
-    $address = $user['address'];
-    $stmt->close();
-
-    // Insert the order with the user's first name
-    $sql = "INSERT INTO orders (user_id, customer_fullname, customer_phonenumber, customer_address, payment_mode) VALUES (?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        throw new Exception("Prepare failed: " . $conn->error);
-    }
-
-    $fullname = $fname . ' ' . $lname;
-
-    $stmt->bind_param("issss", $user_id, $fullname, $phone_number, $address, $payment_mode);
-    if (!$stmt->execute()) {
-        throw new Exception("Failed to place order: " . $stmt->error);
-    }
-
-    // Get the last inserted order ID
-    $order_id = $stmt->insert_id;
-    $stmt->close();
-
-    // Fetch cart items
-    $sql = "SELECT prod_id, qty FROM cart WHERE user_id = ?";
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        throw new Exception("Prepare failed: " . $conn->error);
-    }
-
-    $stmt->bind_param("i", $user_id);
-    if (!$stmt->execute()) {
-        throw new Exception("Failed to fetch cart items: " . $stmt->error);
-    }
-
-    $result = $stmt->get_result();
-    $cart_items = $result->fetch_all(MYSQLI_ASSOC);
-    $stmt->close();
-
-    // Update product stock and clear the cart
-    foreach ($cart_items as $item) {
-        $prod_id = $item['prod_id'];
-        $qty = $item['qty'];
-
-        // Decrease the stock in the products table
-        $sql = "UPDATE products SET stocks = stocks - ? WHERE prod_id = ? AND stocks >= ?";
-        $stmt = $conn->prepare($sql);
-        if ($stmt === false) {
-            throw new Exception("Prepare failed: " . $conn->error);
+        while ($row = $result_fetch_cart->fetch_assoc()) {
+            $stmt_insert_order_items->bind_param("iisisiisi", $order_id, $row['prod_id'], $row['prod_name'], $row['prod_price'], $row['prod_size'], $row['prod_qty'], $row['prod_total'], $row['prod_img'], $user_id);
+            $stmt_insert_order_items->execute();
         }
 
-        $stmt->bind_param("iii", $qty, $prod_id, $qty);
-        if (!$stmt->execute()) {
-            throw new Exception("Failed to update product stock: " . $stmt->error);
-        }
+        // Clear the cart
+        $sql_clear_cart = "DELETE FROM cart WHERE user_id = ?";
+        $stmt_clear_cart = $conn->prepare($sql_clear_cart);
+        $stmt_clear_cart->bind_param("i", $user_id);
+        $stmt_clear_cart->execute();
 
-        if ($stmt->affected_rows === 0) {
-            throw new Exception("Not enough stock for product ID: " . $prod_id);
-        }
+        // Commit transaction
+        $conn->commit();
 
-        $stmt->close();
-
-        // Insert order details into order_items table
-        $sql = "INSERT INTO order_items (order_id, prod_id, qty) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        if ($stmt === false) {
-            throw new Exception("Prepare failed: " . $conn->error);
-        }
-
-        $stmt->bind_param("iii", $order_id, $prod_id, $qty);
-        if (!$stmt->execute()) {
-            throw new Exception("Failed to insert order item: " . $stmt->error);
-        }
-        $stmt->close();
+        // Return success response
+        echo json_encode(['status' => 'success']);
+    } catch (Exception $e) {
+        // Rollback transaction on error
+        $conn->rollback();
+        echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
     }
 
-    // Clear the user's cart
-    $sql = "DELETE FROM cart WHERE user_id = ?";
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        throw new Exception("Prepare failed: " . $conn->error);
-    }
-
-    $stmt->bind_param("i", $user_id);
-    if (!$stmt->execute()) {
-        throw new Exception("Failed to clear cart: " . $stmt->error);
-    }
-    $stmt->close();
-
-    // Commit transaction
-    $conn->commit();
-
-    $response['status'] = 'success';
-    $response['message'] = 'Order placed successfully';
-} catch (Exception $e) {
-    // Rollback transaction
-    $conn->rollback();
-    $response['status'] = 'error';
-    $response['message'] = $e->getMessage();
+    // Close statements
+    $stmt_insert_order->close();
+    $stmt_insert_order_items->close();
+    $stmt_clear_cart->close();
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'No items in the cart']);
 }
 
-// Close connection
+// Close connections
+$stmt_fetch_cart->close();
 $conn->close();
-
-// Set content type to JSON
-header('Content-Type: application/json');
-
-// Return JSON response
-echo json_encode($response);
+?>
