@@ -2,7 +2,7 @@
     <div class="container">
         <a class="navbar-brand d-flex align-items-center  gap-2 " href="http://localhost/garden-brew/">
             <img src="./assets/images/gb_logo-transparent.png" alt="Logo" width="45" height="45 " class="d-inline-block align-text-top">
-            <span class="fw-semibold text-pink">Garden Brew</span>
+            <span class="fw-semibold text-pink fs-4">Garden Brew</span>
         </a>
 
         <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
