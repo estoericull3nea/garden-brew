@@ -144,6 +144,7 @@ session_start();
                             <img src="./assets/images/milktea/classic/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
                             <div class="card-body">
                                 <h5 class="card-title fw-semibold">${product.prod_name}</h5>
+                                <p class="card-category fw-semibold">${product.category}</p>
                                 <p class="card-text smaller">${product.prod_desc}</p>
                                 <form onsubmit="add_cart(event, '${product.prod_id}', this)" method="POST" data-prod-img="${product.prod_img}">
                                     <div class="row">
@@ -194,6 +195,7 @@ session_start();
                             <img src="./assets/images/milktea/special/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
                             <div class="card-body">
                                 <h5 class="card-title fw-semibold">${product.prod_name}</h5>
+                                <p class="card-category fw-semibold">${product.category}</p>
                                 <p class="card-text smaller">${product.prod_desc}</p>
                                 <form onsubmit="add_cart_special_milktea(event, '${product.prod_id}', this)" method="POST" data-prod-img="${product.prod_img}">
                                     <div class="row">
@@ -237,15 +239,15 @@ session_start();
 
                 const data = JSON.parse(xhr.responseText);
                 data.forEach(product => {
-                    console.log(product);
                     const product_card = `
                     <div class="col-12 col-md-6 col-xl-4 mb-3">
                         <div class="card" role="button">
                             <img src="./assets/images/milktea/premium/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
                             <div class="card-body">
                                 <h5 class="card-title fw-semibold">${product.prod_name}</h5>
+                                <p class="card-category fw-semibold">${product.category}</p>
                                 <p class="card-text smaller">${product.prod_desc}</p>
-                                <form onsubmit="add_cart_special_milktea(event, '${product.prod_id}', this)" method="POST" data-prod-img="${product.prod_img}">
+                                <form onsubmit="add_cart_premium_milktea(event, '${product.prod_id}', this)" method="POST" data-prod-img="${product.prod_img}">
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="mb-2">
@@ -291,6 +293,7 @@ session_start();
 
             const user_id = <?= json_encode($_SESSION['user_id']); ?>;
             const prod_name = form.closest('.card-body').querySelector('.card-title').textContent;
+            const prod_category = form.closest('.card-body').querySelector('.card-category').textContent;
             const size = form.querySelector('select[name="size"]').value;
             const quantity = form.querySelector('input[name="quantity"]').value;
             const price = size === '16' ? 39 : 49;
@@ -306,11 +309,13 @@ session_start();
                     get_total_cart();
                     display_custom_toast('Added to Cart', 'success', 2000);
                 }
+
             };
             xhr.send(JSON.stringify({
                 prod_id,
                 user_id,
                 prod_name,
+                prod_category,
                 prod_price: price,
                 prod_size: size,
                 prod_total,
@@ -378,6 +383,7 @@ session_start();
             const prod_name = form.closest('.card-body').querySelector('.card-title').textContent;
             const size = form.querySelector('select[name="size"]').value;
             const quantity = form.querySelector('input[name="quantity"]').value;
+            const prod_category = form.closest('.card-body').querySelector('.card-category').textContent;
             const price = 69
             const prod_total = price * quantity;
             const prod_img = form.getAttribute('data-prod-img');
@@ -399,8 +405,54 @@ session_start();
                 prod_price: price,
                 prod_size: size,
                 prod_total,
+                prod_category,
                 prod_qty: quantity,
                 prod_img // Include the product image in the JSON payload
+            }));
+        }
+
+        function add_cart_premium_milktea(event, prod_id, form) {
+
+            event.preventDefault();
+
+            const login = <?php echo (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) ? 'true' : 'false'; ?>;
+            if (login === false) {
+                display_custom_toast('Please Login or Register first', 'danger', 2000);
+                setTimeout(() => {
+                    window.location.href = "http://localhost/garden-brew/login.php"
+                }, 2000);
+                return
+            }
+
+            const user_id = <?= json_encode($_SESSION['user_id']); ?>;
+            const prod_name = form.closest('.card-body').querySelector('.card-title').textContent;
+            const size = form.querySelector('select[name="size"]').value;
+            const quantity = form.querySelector('input[name="quantity"]').value;
+            const prod_category = form.closest('.card-body').querySelector('.card-category').textContent;
+            const price = 49
+            const prod_total = price * quantity;
+            const prod_img = form.getAttribute('data-prod-img');
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/cart/add_to_cart.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.responseText === '1') {
+                    form.reset();
+                    get_total_cart();
+                    display_custom_toast('Added to Cart', 'success', 2000);
+                }
+            };
+            xhr.send(JSON.stringify({
+                prod_id,
+                user_id,
+                prod_name,
+                prod_price: price,
+                prod_size: size,
+                prod_total,
+                prod_qty: quantity,
+                prod_img, // Include the product image in the JSON payload
+                prod_category
             }));
         }
 

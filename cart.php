@@ -85,7 +85,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 }
 
                 data.forEach(cart => {
-                    console.log(cart);
+                    const prod_img_path = cart.category === 'Classic' ? 'classic' : cart.category === 'Special' ? 'special' : cart.category === 'Premium' ? 'premium' : '';
                     const cart_item = `
                         <tr>
                             <td>${cart.fname} ${cart.lname}</td>
@@ -101,7 +101,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                             </td>
                             <td>${cart.prod_size}</td>
                             <td>${cart.prod_price}</td>
-                            <td><img src="./assets/images/milktea/classic/${cart.prod_img}" style="height: 90px; width: 90px;"></td>
+                            <td><img src="./assets/images/milktea/${prod_img_path}/${cart.prod_img}" style="height: 90px; width: 90px;"></td>
                             <td>${cart.prod_total}</td>
                             <td>
                                 <button class="btn btn-sm btn-pink" onclick="remove_cart(${cart.cart_id})">Remove</button>

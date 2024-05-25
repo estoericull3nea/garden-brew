@@ -5,6 +5,7 @@ session_start();
 // Get the JSON input
 $data = json_decode(file_get_contents('php://input'), true);
 
+
 // Debugging: Log input data
 file_put_contents('php://stderr', print_r($data, TRUE));
 
@@ -15,8 +16,10 @@ $prod_name = $data['prod_name'];
 $prod_price = $data['prod_price'];
 $prod_size = $data['prod_size'] === '16' ? '16oz' : '22oz';
 $prod_total = $data['prod_total'];
+$prod_catagory = $data['prod_category'];
 $prod_qty = $data['prod_qty'];
 $prod_img = $data['prod_img'];
+
 
 // Check if the product already exists in the cart with the same size
 $sql_check = "SELECT * FROM cart WHERE user_id = ? AND prod_id = ? AND prod_size = ?";
@@ -34,7 +37,7 @@ if ($result_check->num_rows > 0) {
     $sql_update = "UPDATE cart SET prod_qty = ?, prod_total = ? WHERE user_id = ? AND prod_id = ? AND prod_size = ?";
     $stmt_update = $conn->prepare($sql_update);
     $stmt_update->bind_param("iiiis", $new_qty, $new_total, $user_id, $prod_id, $prod_size);
-    
+
     if (!$stmt_update->execute()) {
         error_log("Update Error: " . $stmt_update->error);
         echo '0';
@@ -45,10 +48,10 @@ if ($result_check->num_rows > 0) {
     $stmt_update->close();
 } else {
     // Product does not exist, insert a new row
-    $sql_insert = "INSERT INTO cart (user_id, prod_id, prod_name, prod_price, prod_size, prod_total, prod_qty, prod_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql_insert = "INSERT INTO cart (user_id, prod_id, prod_name, prod_price, prod_size, prod_total, prod_qty, prod_img, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt_insert = $conn->prepare($sql_insert);
-    $stmt_insert->bind_param("iisssiis", $user_id, $prod_id, $prod_name, $prod_price, $prod_size, $prod_total, $prod_qty, $prod_img);
-    
+    $stmt_insert->bind_param("iisssiiss", $user_id, $prod_id, $prod_name, $prod_price, $prod_size, $prod_total, $prod_qty, $prod_img, $prod_catagory);
+
     if (!$stmt_insert->execute()) {
         error_log("Insert Error: " . $stmt_insert->error);
         echo '0';
@@ -61,4 +64,3 @@ if ($result_check->num_rows > 0) {
 
 $stmt_check->close();
 $conn->close();
-?>
