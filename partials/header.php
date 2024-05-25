@@ -34,7 +34,7 @@
             <?php else : ?>
 
                 <div>
-                    <a href="http://localhost/garden-brew/login.php" class="btn btn-dark">Login</a>
+                    <a href="http://localhost/garden-brew/login.php" class="btn btn-pink">Login</a>
                 </div>
             <?php endif; ?>
 
