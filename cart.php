@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true)) {
-    header("Location: http://localhost/garden-brew/login.php");
+    header("Location: http://localhost/garden-brew/login.php?login=false");
     exit(); // Always call exit after header to stop further execution
 }
 ?>
@@ -42,7 +42,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 </tbody>
             </table>
 
-     
+
 
             <div class="d-flex flex-column align-items-end gap-3 mt-4 mb-5">
                 <div>
@@ -77,6 +77,9 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
 
 
     <script>
+      
+
+
         function fetch_cart() {
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './ajax/cart/fetch_cart.php', true);

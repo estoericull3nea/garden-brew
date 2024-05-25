@@ -107,6 +107,16 @@ if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) 
     </section> -->
 
     <script>
+        const url = new URL(window.location.href);
+
+        const params = new URLSearchParams(url.search);
+
+        const loginStatus = params.get('login');
+
+        if (loginStatus === 'false') {
+            display_custom_toast('Please Login or Register account first', 'danger', 3000)
+        }
+
         const form_login = document.getElementById('form_login')
         form_login.addEventListener('submit', e => {
             e.preventDefault()
