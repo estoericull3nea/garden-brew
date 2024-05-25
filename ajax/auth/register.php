@@ -36,10 +36,7 @@ $row = $result->fetch_assoc();
 $stmt->close();
 
 if ($row['count'] > 0) {
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Username already registered'
-    ]);
+    echo 'Username already registered';
     exit();
 }
 
