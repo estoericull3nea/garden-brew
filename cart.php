@@ -122,6 +122,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 if (xhr.responseText === '1') {
                     fetch_cart()
                     display_custom_toast('Successfully Removed Cart', 'success', 2000)
+                    get_total_cart()
                 }
 
             }
