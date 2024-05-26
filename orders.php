@@ -319,7 +319,6 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                                     <li class="list-group-item"><span class="fw-semibold">Date Approved:</span> ${formatDateTime(product.date_approved)}</li>
                                     <li class="list-group-item"><span class="fw-semibold">Date Ongoing Started:</span> ${formatDateTime(product.date_ongoing_started)}</li>
                                     <li class="list-group-item"><span class="fw-semibold">Date Delivered:</span> ${formatDateTime(product.date_delivered)}</li>
-                                    <li class="list-group-item"><span class="fw-semibold">Duration:</span> 30mins</li>
                                 </ul>
                                 <div class="card-body">
                                     <button class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</button>
