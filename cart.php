@@ -2,7 +2,7 @@
 session_start();
 if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true)) {
     header("Location: http://localhost/garden-brew/login.php?login=false");
-    exit(); // Always call exit after header to stop further execution
+    exit();
 }
 ?>
 
@@ -12,6 +12,11 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
 <head>
     <title>Cart</title>
     <?php require './partials/head.php'; ?>
+    <style>
+        #display_if_no_cart {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -24,6 +29,10 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
 
     <div class="cart mt-5">
         <div class="container">
+            <div class="text-center" id="display_if_no_cart">
+                <h1 class="text-gradient">Empty Cart :((</h1>
+                <img src="./assets/images/empty_cart.png" alt="">
+            </div>
             <h1 class="mb-5">Your Cart</h1>
             <table class="table text-center align-middle">
                 <thead>
@@ -38,11 +47,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                     </tr>
                 </thead>
                 <tbody id="table_show_cart">
-
                 </tbody>
             </table>
-
-
 
             <div class="d-flex flex-column align-items-end gap-3 mt-4 mb-5">
                 <div>
@@ -54,12 +60,9 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 </div>
                 <button id="orderButton" class="btn btn-pink" data-bs-toggle="modal" data-bs-target="#order_now_modal">Order It Now</button>
             </div>
-
         </div>
     </div>
 
-
-    <!-- Modal Confirmation-->
     <div class="modal fade" id="order_now_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="order_now_modalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -74,66 +77,70 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
         </div>
     </div>
 
-
-
     <script>
-      
-
-
         function fetch_cart() {
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './ajax/cart/fetch_cart.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
-                const data = JSON.parse(xhr.responseText)
-                const table_show_cart = document.getElementById('table_show_cart')
-                table_show_cart.innerHTML = ''
+                const data = JSON.parse(xhr.responseText);
+                const display_if_no_cart = document.getElementById('display_if_no_cart');
+                const table_show_cart = document.getElementById('table_show_cart');
+                const paymentMode = document.getElementById('paymentMode');
+                const orderButton = document.getElementById('orderButton');
 
-                let totalPrice = 0;
+                table_show_cart.innerHTML = '';
 
                 if (data.length === 0) {
+                    display_if_no_cart.style.display = 'block';
                     paymentMode.disabled = true;
                     orderButton.disabled = true;
                 } else {
+                    display_if_no_cart.style.display = 'none';
                     paymentMode.disabled = false;
                     orderButton.disabled = false;
-                }
 
-                data.forEach(cart => {
-                    const prod_img_path = cart.category === 'Classic' ? 'classic' : cart.category === 'Special' ? 'special' : cart.category === 'Premium' ? 'premium' : cart.category === 'Hot' ? 'hot' : 'other';
-                    const cart_item = `
+                    let totalPrice = 0;
+
+                    data.forEach(cart => {
+                        const prod_img_path = cart.category === 'Classic' ? 'classic' :
+                            cart.category === 'Special' ? 'special' :
+                            cart.category === 'Premium' ? 'premium' :
+                            cart.category === 'Hot' ? 'hot' : 'other';
+                        const cart_item = `
+                            <tr>
+                                <td>${cart.prod_name}</td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button class="qty btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.prod_qty - 1})">-</button>
+                                        <input type="number" value="${cart.prod_qty}" min="1" class="qty form-control mx-2" style="width: 60px; text-align: center;" disabled>
+                                        <button class="qty btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.prod_qty + 1})">+</button>
+                                    </div>
+                                </td>
+                                <td>${cart.prod_size}</td>
+                                <td>${cart.prod_price}</td>
+                                <td><img src="./assets/images/milktea/${prod_img_path}/${cart.prod_img}" style="height: 90px; width: 90px;"></td>
+                                <td>${cart.prod_total}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-pink" onclick="remove_cart(${cart.cart_id})">Remove</button>
+                                </td>
+                            </tr>
+                        `;
+                        table_show_cart.innerHTML += cart_item;
+                        totalPrice += parseFloat(cart.prod_total);
+                    });
+
+                    const total_row = `
                         <tr>
-                            <td>${cart.prod_name}</td>
-                            <td>
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <button class="qty btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.prod_qty - 1})">-</button>
-                                    <input type="number" value="${cart.prod_qty}" min="1" class="qty form-control mx-2" style="width: 60px; text-align: center;" disabled>
-                                    <button class="qty btn btn-outline-secondary btn-sm" onclick="update_quantity(${cart.cart_id}, ${cart.prod_qty + 1})">+</button>
-                                </div>
-                            </td>
-                            <td>${cart.prod_size}</td>
-                            <td>${cart.prod_price}</td>
-                            <td><img src="./assets/images/milktea/${prod_img_path}/${cart.prod_img}" style="height: 90px; width: 90px;"></td>
-                            <td>${cart.prod_total}</td>
-                            <td>
-                                <button class="btn btn-sm btn-pink" onclick="remove_cart(${cart.cart_id})">Remove</button>
-                            </td>
+                            <td colspan="6" class="text-end fw-bold">Total:</td>
+                            <td class="fw-bold">${totalPrice.toFixed(2)}</td>
+                            <td></td>
                         </tr>
-                    `
-                    table_show_cart.innerHTML += cart_item
-                    totalPrice += parseFloat(cart.prod_total);
-                })
-                // Add the total price row
-                const total_row = `
-                                <tr>
-                                    <td colspan="6" class="text-end fw-bold">Total:</td>
-                                    <td class="fw-bold">${totalPrice.toFixed(2)}</td>
-                                    <td></td>
-                                </tr>
-                            `;
-                table_show_cart.innerHTML += total_row;
-            }
-            xhr.send()
+                    `;
+                    table_show_cart.innerHTML += total_row;
+                }
+            };
+            xhr.send();
         }
 
         function remove_cart(cart_id) {
@@ -142,15 +149,12 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 if (xhr.responseText === '1') {
-                    fetch_cart()
-                    display_custom_toast('Successfully Removed Cart', 'success', 2000)
-                    get_total_cart()
+                    fetch_cart();
+                    display_custom_toast('Successfully Removed Cart', 'success', 2000);
+                    get_total_cart();
                 }
-
-            }
-            xhr.send(JSON.stringify({
-                cart_id
-            }))
+            };
+            xhr.send(JSON.stringify({ cart_id }));
         }
 
         function update_quantity(cart_id, new_quantity) {
@@ -164,10 +168,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                     fetch_cart();
                 }
             };
-            xhr.send(JSON.stringify({
-                cart_id,
-                qty: new_quantity
-            }));
+            xhr.send(JSON.stringify({ cart_id, qty: new_quantity }));
         }
 
         function order_now() {
@@ -180,23 +181,18 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 if (response.status === 'success') {
                     display_custom_toast('Order placed successfully', 'success', 3000);
                     fetch_cart();
-                    get_total_cart()
-                    get_pending_status()
-                    hideModal('order_now_modal')
+                    get_total_cart();
+                    get_pending_status();
+                    hideModal('order_now_modal');
                 } else {
                     display_custom_toast('Failed to place order: ' + response.message, 'error', 2000);
                 }
             };
-            xhr.send(JSON.stringify({
-                paymentMode: paymentMode
-            }));
+            xhr.send(JSON.stringify({ paymentMode }));
         }
 
-
-
-
         addEventListener("DOMContentLoaded", () => {
-            fetch_cart()
+            fetch_cart();
         });
     </script>
 </body>
