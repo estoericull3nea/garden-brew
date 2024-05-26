@@ -20,11 +20,12 @@ oi.prod_size,
 oi.prod_qty, 
 oi.prod_total, 
 oi.prod_img,
-o.*  -- Select all columns from orders table
+o.*, u.*  -- Select all columns from orders table
 FROM 
 order_items AS oi
 JOIN 
 orders AS o ON oi.order_id = o.order_id
+JOIN users AS u ON oi.user_id = u.user_id
 WHERE 
 oi.order_id = ? 
 AND oi.user_id = ?");

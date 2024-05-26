@@ -16,22 +16,45 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script defer src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #print-section,
+            #print-section * {
+                visibility: visible;
+            }
+
+            #print-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            @page {
+                margin: 0;
+                size: auto;
+            }
+
+            body {
+                margin: 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
-
-
     <div id="customMessage" class="custom-message d-flex align-items-center justify-content-between gap-2 ">
         <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-normal text-center"></p>
         <span id="closeButton"></span>
     </div>
 
-
     <main class="d-flex flex-nowrap">
         <?php require './partials/aside.php'; ?>
         <div class="w-100 mt-5">
-            <!-- show table -->
-            <!-- <h1 id="display_no_students" class="mb-0 text-center">No Registered Students</h1> -->
             <div class="table-responsive w-100 p-3 ">
                 <table id="show_pending_table" class="caption-top border-0 my-5" style="width:100%; font-size: .7rem;">
                     <caption>List of Pending Orders</caption>
@@ -51,38 +74,40 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                     </tbody>
                 </table>
             </div>
-            <!-- show table -->
         </div>
     </main>
 
-    <!-- Modal view single order -->
     <div class="modal fade" id="modal_view_single_order" tabindex="-1" aria-labelledby="modal_view_single_orderLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-body">
-                    <table class="table text-center align-middle">
-                        <thead>
-                            <tr>
-                                <th scope="col">Product Name</th>
-                                <th scope="col">Product Price</th>
-                                <th scope="col">Product Size</th>
-                                <th scope="col">Product Quantity</th>
-                                <th scope="col">Product Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table_modal_showing_items">
-
-                        </tbody>
-                    </table>
+                    <div id="print-section">
+                        <table class="table text-center align-middle">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Customer FullName</th>
+                                    <th scope="col">Customer Phone Number</th>
+                                    <th scope="col">Customer Address</th>
+                                    <th scope="col">Payment Mode</th>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">Product Price</th>
+                                    <th scope="col">Product Size</th>
+                                    <th scope="col">Product Quantity</th>
+                                    <th scope="col">Product Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table_modal_showing_items">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-dark" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-dark" onclick="printReceipt()">Print Receipt</button>
                 </div>
             </div>
         </div>
     </div>
-
-
 
     <script>
         function show_all_pending_orders() {
@@ -92,19 +117,14 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                 const data = JSON.parse(xhr.responseText)
                 if (data) {
                     document.getElementById('show_pending_table').style.display = 'table'
-                    // document.getElementById('display_no_students').style.display = 'none'
-
 
                     const tbody = document.getElementById('show_pending_orders');
                     const table = document.getElementById('show_pending_table');
 
-
-                    // Check if DataTable instance exists and destroy it
                     if ($.fn.DataTable.isDataTable(table)) {
                         $(table).DataTable().destroy();
                         tbody.innerHTML = '';
                     }
-
 
                     data.forEach(function(row) {
                         const tr = document.createElement('tr');
@@ -123,7 +143,6 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                         `;
                         tbody.appendChild(tr);
                     });
-                    // Reinitialize DataTables after adding rows
                     var dataTable = new DataTable(table, {
                         stateSave: true,
                     });
@@ -138,32 +157,50 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText);
+                console.log(data);
                 const table_modal_showing_items = document.getElementById('table_modal_showing_items');
                 table_modal_showing_items.innerHTML = '';
 
                 let total_price = 0;
+                let customer_info = '';
 
-                data.forEach(item => {
-                    const card = `
-                <tr>
-                    <td>${item.prod_name}</td>
-                    <td>${item.prod_price}</td>
-                    <td>${item.prod_size}</td>
-                    <td>${item.prod_qty}</td>
-                    <td>${item.prod_total}</td>
-                </tr>
-            `;
-                    table_modal_showing_items.innerHTML += card;
-                    total_price += parseFloat(item.prod_total); // Accumulate the total price
+                data.forEach((item, index) => {
+                    if (index === 0) {
+                        customer_info = `
+                            <tr>
+                                <td>${item.fname} ${item.lname}</td>
+                                <td>${item.phone_number}</td>
+                                <td>${item.address}</td>
+                                <td>${item.payment_mode}</td>
+                                <td>${item.prod_name}</td>
+                                <td>${item.prod_price}</td>
+                                <td>${item.prod_size}</td>
+                                <td>${item.prod_qty}</td>
+                                <td>${item.prod_total}</td>
+                            </tr>
+                        `;
+                    } else {
+                        customer_info += `
+                            <tr>
+                                <td colspan="4"></td>
+                                <td>${item.prod_name}</td>
+                                <td>${item.prod_price}</td>
+                                <td>${item.prod_size}</td>
+                                <td>${item.prod_qty}</td>
+                                <td>${item.prod_total}</td>
+                            </tr>
+                        `;
+                    }
+                    total_price += parseFloat(item.prod_total);
                 });
 
-                // Add a row for the total price
                 const totalRow = `
-                    <tr class="text-end">
-                        <td colspan="5"><strong>Total Price: ${total_price.toFixed(2)}</strong></td>
+                    <tr>
+                        <td colspan="8" class="text-end"><strong>Total Price:</strong></td>
+                        <td><strong>${total_price.toFixed(2)}</strong></td>
                     </tr>
                 `;
-                table_modal_showing_items.innerHTML += totalRow;
+                table_modal_showing_items.innerHTML = customer_info + totalRow;
             };
             xhr.send(JSON.stringify({
                 order_id,
@@ -171,9 +208,35 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             }));
         }
 
+        function printReceipt() {
+            const printContents = document.getElementById('print-section').innerHTML;
+            const originalContents = document.body.innerHTML;
+            const printWindow = window.open('', '', 'height=600,width=800');
+
+            printWindow.document.write('<html><head><title>Print Receipt</title>');
+            printWindow.document.write(`
+                    <style>
+                        @media print {
+                            body { font-size: 0.7rem; }
+                            table { width: 100%; border-collapse: collapse; }
+                            th, td { border: 1px solid black; padding: 8px; text-align: center; }
+                            .shop-name { text-align: center; font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; }
+                            .total-row { text-align: right; }
+                            @page { margin: 0; }
+                            body { margin: 0; }
+                            header, footer { display: none; }
+                        }
+                    </style>
+                `);
+            printWindow.document.write('</head><body>');
+            printWindow.document.write('<div class="shop-name">Garden Brew</div>');
+            printWindow.document.write(printContents);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
 
         function mark_as_approved(order_id, user_id) {
-
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './ajax/orders/mark_as_approved.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -187,11 +250,9 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                 order_id,
                 user_id
             }))
-
         }
 
         function mark_as_ongoing(order_id, user_id) {
-
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './ajax/orders/mark_as_ongoing.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -205,11 +266,9 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                 order_id,
                 user_id
             }))
-
         }
 
         function mark_as_complete(order_id, user_id) {
-
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './ajax/orders/mark_as_complete.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -223,14 +282,12 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                 order_id,
                 user_id
             }))
-
         }
 
         document.addEventListener("DOMContentLoaded", () => {
             show_all_pending_orders()
         });
     </script>
-
 </body>
 
 </html>
