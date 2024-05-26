@@ -42,9 +42,17 @@
                 </div>
             <?php else : ?>
 
-                <div>
-                    <a href="http://localhost/garden-brew/login.php" class="btn btn-pink">Login</a>
+                <div class="d-flex align-items-center gap-2">
+
+                    <div>
+                        <a href="http://localhost/garden-brew/login.php" class="btn btn-pink">Login</a>
+                    </div>
+
+                    <div>
+                        <a href="http://localhost/garden-brew/register.php" class="btn btn-outline-pink">Register</a>
+                    </div>
                 </div>
+
             <?php endif; ?>
 
         </div>
