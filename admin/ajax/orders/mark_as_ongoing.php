@@ -8,7 +8,7 @@ $user_id = $data['user_id'];
 $order_id = $data['order_id'];
 
 // Prepare and bind
-$stmt = $conn->prepare("UPDATE orders SET status = 'ongoing' WHERE order_id = ? AND user_id = ?");
+$stmt = $conn->prepare("UPDATE orders SET status = 'ongoing', date_ongoing_started = NOW() WHERE order_id = ? AND user_id = ?");
 $stmt->bind_param("ii", $order_id, $user_id);
 
 // Execute the statement

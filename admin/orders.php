@@ -86,10 +86,10 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                           <td>${row.phone_number}</td>
                           <td>${row.address}</td>
                           <td>${row.payment_mode}</td>
-                          <td class="${row.status === 'pending' ? `text-warning fw-bold` : row.status === 'approved' ? `text-primary fw-bold` : row.status === 'completed' ? `text-success fw-bold` : row.status === 'canceled' ? `text-danger fw-bold` : ``}" >${row.status}</td>
+                          <td class="${row.status === 'pending' ? `text-warning fw-bold` : row.status === 'approved' ? `text-primary fw-bold` : row.status === 'delivered' ? `text-success fw-bold` : row.status === 'canceled' ? `text-danger fw-bold` : `text-secondary fw-bold`}" >${row.status}</td>
                           <td>${formatDateTime(row.order_date)}</td>
                           <td class="d-flex align-items-center justify-content-center gap-1">
-                                ${row.status === 'pending' ? `<button onclick="mark_as_approved('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Approved</button>` : row.status === 'approved' ? `<button onclick="mark_as_ongoing('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Go</button>` : row.status === 'ongoing' ? `<button onclick="mark_as_complete('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Mark as Complete</button>` : ``}
+                                ${row.status === 'pending' ? `<button onclick="mark_as_approved('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Approved</button>` : row.status === 'approved' ? `<button onclick="mark_as_ongoing('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Go</button>` : row.status === 'ongoing' ? `<button onclick="mark_as_complete('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Mark as Delivered</button>` : ``}
                                 <button class="btn btn-sm btn-outline-dark smallest rounded-5">View</button>
                           </td>
 

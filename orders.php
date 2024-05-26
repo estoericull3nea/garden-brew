@@ -55,8 +55,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                     <button class="nav-link active position-relative" id="nav-pending-tab" data-bs-toggle="tab" data-bs-target="#nav-pending" type="button" role="tab" aria-controls="nav-pending" aria-selected="true">Pending</button>
                     <button class="nav-link" id="nav-approved-tab" data-bs-toggle="tab" data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-approved" aria-selected="true">Approved</button>
                     <button class="nav-link" id="nav-going-tab" data-bs-toggle="tab" data-bs-target="#nav-going" type="button" role="tab" aria-controls="nav-going" aria-selected="false">On Going</button>
-                    <button class="nav-link" id="nav-delivered-tab" data-bs-toggle="tab" data-bs-target="#nav-delivered" type="button" role="tab" aria-controls="nav-delivered" aria-selected="false">Delivered</button>
                     <button class="nav-link" id="nav-canceled-tab" data-bs-toggle="tab" data-bs-target="#nav-canceled" type="button" role="tab" aria-controls="nav-canceled" aria-selected="false">Canceled</button>
+                    <button class="nav-link" id="nav-delivered-tab" data-bs-toggle="tab" data-bs-target="#nav-delivered" type="button" role="tab" aria-controls="nav-delivered" aria-selected="false">Delivered</button>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
@@ -101,13 +101,13 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Order ID: ${product.order_id}</h5>
-                                    <h5 class="card-title">Status: ${product.status}</h5>
+                                    <h5 class="card-title">Status: <span class="text-warning fs-5 fw-bold"> ${capitalizeFirstLetter(product.status)}</span></h5>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><span class="fw-semibold">Customer Name:</span> ${product.fname} ${product.lname}</li>
                                     <li class="list-group-item"><span class="fw-semibold">Customer Address:</span> ${product.address}</li>
                                     <li class="list-group-item"><span class="fw-semibold">Customer Phone Number:</span> ${product.phone_number}</li>
-                                    <li class="list-group-item"><span class="fw-semibold">Order Date:</span> ${formatDateTime(product.order_date)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Ordered:</span> ${formatDateTime(product.order_date)}</li>
                                 </ul>
                                 <div class="card-body">
                                     <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
@@ -193,7 +193,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Order ID: ${product.order_id}</h5>
-                                    <h5 class="card-title">Status: ${product.status}</h5>
+                                    <h5 class="card-title">Status: <span class="text-danger fs-5 fw-bold"> ${capitalizeFirstLetter(product.status)}</span></h5>
+
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><span class="fw-semibold">Customer Name:</span> ${product.fname} ${product.lname}</li>
@@ -230,13 +231,15 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Order ID: ${product.order_id}</h5>
-                                    <h5 class="card-title">Status: ${product.status}</h5>
+                                    <h5 class="card-title">Status: <span class="text-primary fs-5 fw-bold"> ${capitalizeFirstLetter(product.status)}</span></h5>
+
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><span class="fw-semibold">Customer Name:</span> ${product.fname} ${product.lname}</li>
                                     <li class="list-group-item"><span class="fw-semibold">Customer Address:</span> ${product.address}</li>
                                     <li class="list-group-item"><span class="fw-semibold">Customer Phone Number:</span> ${product.phone_number}</li>
-                                    <li class="list-group-item"><span class="fw-semibold">Order Date:</span> ${formatDateTime(product.order_date)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Ordered:</span> ${formatDateTime(product.order_date)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Approved:</span> ${formatDateTime(product.date_approved)}</li>
                                 </ul>
                                 <div class="card-body">
                                     <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
@@ -267,13 +270,16 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Order ID: ${product.order_id}</h5>
-                                    <h5 class="card-title">Status: ${product.status}</h5>
+                                    <h5 class="card-title">Status: <span class="text-secondary fs-5 fw-bold"> ${capitalizeFirstLetter(product.status)}</span></h5>
+
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><span class="fw-semibold">Customer Name:</span> ${product.fname} ${product.lname}</li>
                                     <li class="list-group-item"><span class="fw-semibold">Customer Address:</span> ${product.address}</li>
                                     <li class="list-group-item"><span class="fw-semibold">Customer Phone Number:</span> ${product.phone_number}</li>
-                                    <li class="list-group-item"><span class="fw-semibold">Order Date:</span> ${formatDateTime(product.order_date)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Ordered:</span> ${formatDateTime(product.order_date)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Approved:</span> ${formatDateTime(product.date_approved)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Ongoing Started:</span> ${formatDateTime(product.date_ongoing_started)}</li>
                                 </ul>
                                 <div class="card-body">
                                     <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
@@ -304,17 +310,21 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Order ID: ${product.order_id}</h5>
-                                    <h5 class="card-title">Status: ${product.status}</h5>
+                                    <h5 class="card-title">Status: <span class="text-success fs-5 fw-bold"> ${capitalizeFirstLetter(product.status)}</span></h5>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><span class="fw-semibold">Customer Name:</span> ${product.fname} ${product.lname}</li>
                                     <li class="list-group-item"><span class="fw-semibold">Customer Address:</span> ${product.address}</li>
                                     <li class="list-group-item"><span class="fw-semibold">Customer Phone Number:</span> ${product.phone_number}</li>
-                                    <li class="list-group-item"><span class="fw-semibold">Order Date:</span> ${formatDateTime(product.order_date)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Ordered:</span> ${formatDateTime(product.order_date)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Approved:</span> ${formatDateTime(product.date_approved)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Ongoing Started:</span> ${formatDateTime(product.date_ongoing_started)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Delivered:</span> ${formatDateTime(product.date_delivered)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Duration:</span> 30mins</li>
                                 </ul>
                                 <div class="card-body">
                                     <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
-                                    <a href="#" class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</a>
+                                    ${product.status !== 'delivered' ? ` <a href="#" class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</a>` : ``}
                                 </div>
                             </div>
                         </div>
