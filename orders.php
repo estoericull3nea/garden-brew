@@ -110,8 +110,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                                     <li class="list-group-item"><span class="fw-semibold">Date Ordered:</span> ${formatDateTime(product.order_date)}</li>
                                 </ul>
                                 <div class="card-body">
-                                    <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
-                                    <a href="#" class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</a>
+                                    <button class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</button>
+                                    <button class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</button>
                                 </div>
                             </div>
                         </div>
@@ -204,7 +204,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                                     <li class="list-group-item"><span class="fw-semibold">Date Canceled:</span> ${formatDateTime(product.canceled_at)}</li>
                                 </ul>
                                 <div class="card-body">
-                                    <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
+                                    <button class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</button>
                                 </div>
                             </div>
                         </div>
@@ -242,8 +242,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                                     <li class="list-group-item"><span class="fw-semibold">Date Approved:</span> ${formatDateTime(product.date_approved)}</li>
                                 </ul>
                                 <div class="card-body">
-                                    <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
-                                    <a href="#" class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</a>
+                                    <button class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</button>
+                                    <button class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</button>
                                 </div>
                             </div>
                         </div>
@@ -282,8 +282,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                                     <li class="list-group-item"><span class="fw-semibold">Date Ongoing Started:</span> ${formatDateTime(product.date_ongoing_started)}</li>
                                 </ul>
                                 <div class="card-body">
-                                    <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
-                                    <a href="#" class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</a>
+                                    <button class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</button>
                                 </div>
                             </div>
                         </div>
@@ -323,8 +322,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                                     <li class="list-group-item"><span class="fw-semibold">Duration:</span> 30mins</li>
                                 </ul>
                                 <div class="card-body">
-                                    <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
-                                    ${product.status !== 'delivered' ? ` <a href="#" class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</a>` : ``}
+                                    <button class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</button>
+                                    ${product.status !== 'delivered' ? ` <button class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</button>` : ``}
                                 </div>
                             </div>
                         </div>

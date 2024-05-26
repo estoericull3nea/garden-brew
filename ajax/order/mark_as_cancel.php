@@ -12,7 +12,7 @@ $sql = "
 UPDATE orders
 SET status = 'canceled',
     canceled_at = NOW()
-WHERE status = 'pending' AND user_id = ? AND order_id = ?;
+WHERE status = 'pending' OR status = 'approved' AND user_id = ? AND order_id = ?;
 ";
 
 // Create a prepared statement
