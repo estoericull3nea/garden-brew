@@ -35,7 +35,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                         <h6>Pending Orders</h6>
                         <h1 class="text-center" id="count_pending_orders"></h1>
                         <div class="text-end">
-                            <a href="#" class="text-end text-black fw-medium">See More</a>
+                            <!-- <a href="#" class="text-end text-black fw-medium">See More</a> -->
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                         <h6>Approved Orders</h6>
                         <h1 class="text-center" id="count_approved_orders"></h1>
                         <div class="text-end">
-                            <a href="#" class="text-end text-black fw-medium">See More</a>
+                            <!-- <a href="#" class="text-end text-black fw-medium">See More</a> -->
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                         <h6>Ongoing Orders</h6>
                         <h1 class="text-center" id="count_ongoing_orders"></h1>
                         <div class="text-end">
-                            <a href="#" class="text-end text-black fw-medium">See More</a>
+                            <!-- <a href="#" class="text-end text-black fw-medium">See More</a> -->
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                         <h6>Canceled Orders</h6>
                         <h1 class="text-center" id="count_canceled_orders"></h1>
                         <div class="text-end">
-                            <a href="#" class="text-end text-black fw-medium">See More</a>
+                            <!-- <a href="#" class="text-end text-black fw-medium">See More</a> -->
                         </div>
                     </div>
                 </div>
@@ -73,7 +73,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                         <h6>Delivered Orders</h6>
                         <h1 class="text-center" id="count_delivered_orders"></h1>
                         <div class="text-end">
-                            <a href="#" class="text-end text-black fw-medium">See More</a>
+                            <!-- <a href="#" class="text-end text-black fw-medium">See More</a> -->
                         </div>
                     </div>
                 </div>

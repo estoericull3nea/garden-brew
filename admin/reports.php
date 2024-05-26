@@ -28,7 +28,6 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                     <caption>Daily Sales Report</caption>
                     <thead class="text-center">
                         <tr>
-                            <th class="border-0">Order ID</th>
                             <th class="border-0">Product Name</th>
                             <th class="border-0">Product Price</th>
                             <th class="border-0">Product Quantity</th>
@@ -43,7 +42,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td class="text-end" colspan="9"><strong id="total_sum">Total: 0.00</strong></td>
+                            <td class="text-end" colspan="8"><strong id="total_sum">Total: 0.00</strong></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -61,6 +60,8 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             xhr.open('POST', './ajax/orders/fetch_sales.php', true);
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText);
+                console.log(data);
+                // return
                 if (data) {
                     document.getElementById('show_users_table').style.display = 'table';
                     const tbody = document.getElementById('show_users_table_body');
@@ -69,7 +70,6 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                     data.forEach(function(row) {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                                <td>${row.order_id}</td>
                                 <td>${row.prod_name}</td>
                                 <td>${row.prod_price}</td>
                                 <td>${row.prod_qty}</td>
