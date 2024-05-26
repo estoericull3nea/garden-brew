@@ -52,11 +52,42 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
         <div class="mt-5">
             <nav class="d-flex justify-content-center">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active position-relative" id="nav-pending-tab" data-bs-toggle="tab" data-bs-target="#nav-pending" type="button" role="tab" aria-controls="nav-pending" aria-selected="true">Pending</button>
-                    <button class="nav-link" id="nav-approved-tab" data-bs-toggle="tab" data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-approved" aria-selected="true">Approved</button>
-                    <button class="nav-link" id="nav-going-tab" data-bs-toggle="tab" data-bs-target="#nav-going" type="button" role="tab" aria-controls="nav-going" aria-selected="false">On Going</button>
-                    <button class="nav-link" id="nav-canceled-tab" data-bs-toggle="tab" data-bs-target="#nav-canceled" type="button" role="tab" aria-controls="nav-canceled" aria-selected="false">Canceled</button>
-                    <button class="nav-link" id="nav-delivered-tab" data-bs-toggle="tab" data-bs-target="#nav-delivered" type="button" role="tab" aria-controls="nav-delivered" aria-selected="false">Delivered</button>
+                    <button class="nav-link active position-relative" id="nav-pending-tab" data-bs-toggle="tab" data-bs-target="#nav-pending" type="button" role="tab" aria-controls="nav-pending" aria-selected="true">
+                        Pending
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning z-1">
+                            <span class="smallest" id="count_pending"></span>
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </button>
+                    <button class="nav-link position-relative" id="nav-approved-tab" data-bs-toggle="tab" data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-approved" aria-selected="true">
+                        Approved
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary z-1">
+                            <span class="smallest" id="count_approved"></span>
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </button>
+                    <button class="nav-link position-relative" id="nav-going-tab" data-bs-toggle="tab" data-bs-target="#nav-going" type="button" role="tab" aria-controls="nav-going" aria-selected="false">
+                        On Going
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary z-1">
+                            <span class="smallest" id="count_ongoing"></span>
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </button>
+                    <button class="nav-link position-relative" id="nav-canceled-tab" data-bs-toggle="tab" data-bs-target="#nav-canceled" type="button" role="tab" aria-controls="nav-canceled" aria-selected="false">
+
+                        Canceled
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger z-1">
+                            <span class="smallest" id="count_canceled"></span>
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </button>
+                    <button class="nav-link position-relative" id="nav-delivered-tab" data-bs-toggle="tab" data-bs-target="#nav-delivered" type="button" role="tab" aria-controls="nav-delivered" aria-selected="false">
+                        Delivered
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success z-1">
+                            <span class="smallest" id="count_delivered"></span>
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </button>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
@@ -333,12 +364,67 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             xhr.send();
         }
 
+        function count_pending() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/count/count_pending_status.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                document.getElementById('count_pending').textContent = xhr.responseText
+            };
+            xhr.send()
+        }
+
+        function count_approved() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/count/count_approved_status.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                document.getElementById('count_approved').textContent = xhr.responseText
+            };
+            xhr.send()
+        }
+
+        function count_ongoing() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/count/count_ongoing_status.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                document.getElementById('count_ongoing').textContent = xhr.responseText
+            };
+            xhr.send()
+        }
+
+        function count_canceled() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/count/count_canceled_status.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                document.getElementById('count_canceled').textContent = xhr.responseText
+            };
+            xhr.send()
+        }
+
+        function count_delivered() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/count/count_delivered_status.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                document.getElementById('count_delivered').textContent = xhr.responseText
+            };
+            xhr.send()
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             fetch_pending_orders();
             fetch_canceled_orders();
             fetch_approved_order()
             fetch_ongoing_order()
             fetch_delivered_order()
+            count_pending()
+            count_approved()
+            count_ongoing()
+            count_canceled()
+            count_delivered()
         });
     </script>
 </body>
