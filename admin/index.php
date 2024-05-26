@@ -27,53 +27,79 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
 
     <main class="d-flex flex-nowrap">
         <?php require './partials/aside.php'; ?>
-        <div class="d-flex gap-3  mt-2 ms-1 w-100">
-            <div class="col">
-                <div class="box border p-2" style="width: 200px; height: auto;">
-                    <h6>Pending Orders</h6>
-                    <h1 class="text-center" id="count_pending_orders"></h1>
-                    <div class="text-end">
-                        <a href="#" class="text-end text-black fw-medium">See More</a>
+
+        <div>
+            <div class="d-flex gap-3 justify-content-center w-100 mt-2 mb-5 ms-1 ">
+                <div class="col">
+                    <div class="box border p-2" style="width: 200px; height: auto;">
+                        <h6>Pending Orders</h6>
+                        <h1 class="text-center" id="count_pending_orders"></h1>
+                        <div class="text-end">
+                            <a href="#" class="text-end text-black fw-medium">See More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="box border p-2" style="width: 200px; height: auto;">
+                        <h6>Canceled Orders</h6>
+                        <h1 class="text-center" id="count_canceled_orders"></h1>
+                        <div class="text-end">
+                            <a href="#" class="text-end text-black fw-medium">See More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="box border p-2" style="width: 200px; height: auto;">
+                        <h6>Approved Orders</h6>
+                        <h1 class="text-center" id="count_approved_orders"></h1>
+                        <div class="text-end">
+                            <a href="#" class="text-end text-black fw-medium">See More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="box border p-2" style="width: 200px; height: auto;">
+                        <h6>Delivered Orders</h6>
+                        <h1 class="text-center" id="count_delivered_orders"></h1>
+                        <div class="text-end">
+                            <a href="#" class="text-end text-black fw-medium">See More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="box border p-2" style="width: 200px; height: auto;">
+                        <h6>Ongoing Orders</h6>
+                        <h1 class="text-center" id="count_ongoing_orders"></h1>
+                        <div class="text-end">
+                            <a href="#" class="text-end text-black fw-medium">See More</a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="box border p-2" style="width: 200px; height: auto;">
-                    <h6>Canceled Orders</h6>
-                    <h1 class="text-center" id="count_canceled_orders"></h1>
-                    <div class="text-end">
-                        <a href="#" class="text-end text-black fw-medium">See More</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="box border p-2" style="width: 200px; height: auto;">
-                    <h6>Approved Orders</h6>
-                    <h1 class="text-center" id="count_approved_orders"></h1>
-                    <div class="text-end">
-                        <a href="#" class="text-end text-black fw-medium">See More</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="box border p-2" style="width: 200px; height: auto;">
-                    <h6>Delivered Orders</h6>
-                    <h1 class="text-center" id="count_delivered_orders"></h1>
-                    <div class="text-end">
-                        <a href="#" class="text-end text-black fw-medium">See More</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="box border p-2" style="width: 200px; height: auto;">
-                    <h6>Ongoing Orders</h6>
-                    <h1 class="text-center" id="count_ongoing_orders"></h1>
-                    <div class="text-end">
-                        <a href="#" class="text-end text-black fw-medium">See More</a>
-                    </div>
+
+            <hr>
+
+            <div class="row w-100 mt-5 ms-1">
+                <div class="col-sm-12 col-md-6 col-lg-3 w-100">
+                    <table class="table table-hover text-center align-middle border caption-top">
+                        <caption>Top 5 Best Seller Milktea</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Product ID</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Product Size</th>
+                                <th scope="col">Product Total Bought</th>
+                            </tr>
+                        </thead>
+                        <tbody id="display_top_5_products">
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+
     </main>
 
 
@@ -128,6 +154,33 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             xhr.send()
         }
 
+        function count_top_5_products() {
+            const xhr = new XMLHttpRequest()
+            xhr.open('POST', './ajax/count/count_top_5_products.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                const data = JSON.parse(xhr.responseText)
+                const display_top_5_products = document.getElementById('display_top_5_products')
+                display_top_5_products.innerHTML = ''
+                let count = 1
+                data.forEach(prod => {
+                    console.log(prod);
+                    const item = `
+                        <tr>
+                            <td>${count}</td>
+                            <td>${prod.prod_id}</td>
+                            <td>${prod.prod_name}</td>
+                            <td>${prod.prod_size}</td>
+                            <td>${prod.count}</td>
+                        </tr>
+                    `
+                    count++;
+                    display_top_5_products.innerHTML += item
+                })
+            }
+            xhr.send()
+        }
+
 
         document.addEventListener("DOMContentLoaded", () => {
             count_pending_orders()
@@ -135,6 +188,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             count_approved_orders()
             count_delivered_orders()
             count_ongoing_orders()
+            count_top_5_products()
         });
     </script>
 </body>

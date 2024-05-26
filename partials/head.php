@@ -14,12 +14,16 @@
 <script defer src="./assets/js/bootstrap.bundle.min.js"></script>
 
 <!-- jquery -->
-<script  src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <!-- boostrap icon -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
 <!-- custom css and js -->
-<script  src="./assets/js/index.js"></script>
+<script src="./assets/js/index.js"></script>
 <link rel="stylesheet" href="./assets/css/default.css">
 
+<!-- datatables cdn -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script defer src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
