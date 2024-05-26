@@ -63,7 +63,7 @@
                             <input type="text" class="form-control shadow-none" required name="username" />
                         </div>
 
-                        <div class="mb-3 mb-3">
+                        <div class="mb-3">
                             <label class="form-label " for="form3Example4">Password</label>
                             <input type="password" id="form3Example4" class="form-control shadow-none" required name="password" />
                         </div>
@@ -107,7 +107,13 @@
             const phoneInput = form_register.querySelector('input[name="phone_number"]');
             const phonePattern = /^\d{11}$/;
             if (!phonePattern.test(phoneInput.value)) {
-                alert('Please enter a valid phone number with exactly 11 digits.');
+                display_custom_toast('Please enter a valid phone number with exactly 11 digits', 'danger', 3000);
+                return;
+            }
+
+            const passwordInput = form_register.querySelector('input[name="password"]');
+            if (passwordInput.value.length < 8) {
+                display_custom_toast('Password must be at least 8 characters long', 'danger', 3000);
                 return;
             }
 
