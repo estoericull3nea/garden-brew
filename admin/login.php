@@ -40,13 +40,13 @@
         <span id="closeButton"></span>
     </div>
 
-    <section class="vh-100">
-        <div class="container-fluid h-custom">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-md-9 col-lg-6 col-xl-5">
+    <section style="height: 100vh;">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12 col-md-6">
                     <img src="../assets/images/gb_logo-transparent.png" class="img-fluid" alt="Sample image">
                 </div>
-                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <div class="col-12 col-md-6">
                     <form id="form_login" method="POST">
 
                         <h1 class="fw-bold text-pink">Admin</h1>
@@ -65,7 +65,6 @@
 
                         <div class="text-center text-lg-start mt-4 pt-2">
                             <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-pink" style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-                            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="http://localhost/garden-brew/register.php" class="text-pink">Register</a></p>
                         </div>
 
                     </form>
@@ -90,20 +89,20 @@
             xhr.open('POST', './ajax/auth/login.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
-                // const data = xhr.responseText;
-                // if (data === 'Incorrect password') {
-                //     display_custom_toast('Incorrect Username or Password', 'danger', 3000)
-                // } else if (data === '1') {
-                //     form_login.reset()
-                //     display_custom_toast('Logged In', 'success', 2000)
-                //     setTimeout(() => {
-                //         window.location.href = 'http://localhost/garden-brew/'
-                //     }, 2000);
-                // } else if (data === 'User does not exist') {
-                //     display_custom_toast('User does not exist', 'danger', 3000)
-                // } else {
-                //     console.log(data);
-                // }
+                const data = xhr.responseText;
+                if (data === 'Incorrect password') {
+                    display_custom_toast('Incorrect Username or Password', 'danger', 3000)
+                } else if (data === '1') {
+                    form_login.reset()
+                    display_custom_toast('Logged In', 'success', 2000)
+                    setTimeout(() => {
+                        window.location.href = 'http://localhost/garden-brew/'
+                    }, 2000);
+                } else if (data === 'User does not exist') {
+                    display_custom_toast('User does not exist', 'danger', 3000)
+                } else {
+                    console.log(data);
+                }
                 console.log(xhr.responseText);
 
                 if (xhr.responseText === '1') {
