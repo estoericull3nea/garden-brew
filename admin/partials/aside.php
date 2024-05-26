@@ -40,11 +40,11 @@
                 Reports
             </a>
         </li>
-        <li>
+        <!-- <li>
             <a href="http://localhost/garden-brew/admin/cash-payment.php" class="nav-link link-body-emphasis" data-page="cash_payment">
                 Cash Payment
             </a>
-        </li>
+        </li> -->
     </ul>
     <hr>
     <ul class="list-unstyled">
