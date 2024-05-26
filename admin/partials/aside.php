@@ -9,10 +9,8 @@
 
 <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-        <svg class="bi pe-none me-2" width="40" height="32">
-            <use xlink:href="#bootstrap" />
-        </svg>
-        <span class="fs-4">Garden Brew (Admin)</span>
+
+        <span class="fs-3 fw-bold text-gradient">Garden Brew</span>
     </a>
     <hr>
     <ul id="nav-list" class="nav nav-pills flex-column mb-auto">
@@ -49,14 +47,14 @@
         </li>
     </ul>
     <hr>
-    <div class="dropdown">
-        <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <strong>Admin</strong>
-        </a>
-        <ul class="dropdown-menu text-small shadow">
-            <li><a class="dropdown-item" href="#">Sign out</a></li>
-        </ul>
-    </div>
+    <ul class="list-unstyled">
+        <li>
+            <a href="http://localhost/garden-brew/admin/logout.php" class="nav-link link-body-emphasis" data-page="cash_payment">
+                Logout
+            </a>
+        </li>
+    </ul>
+
 </div>
 
 <script>

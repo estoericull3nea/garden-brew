@@ -23,7 +23,6 @@ if ($stmt->num_rows > 0) {
         // Successful login
         echo '1';
         $_SESSION['admin_logged_in'] = true;
-        
     } else {
         // Invalid password
         http_response_code(401);

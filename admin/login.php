@@ -1,9 +1,9 @@
 <?php
-// session_start();
-// if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) {
-//     header("Location: http://localhost/garden-brew/");
-//     exit();
-// }
+session_start();
+if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
+    header("Location: http://localhost/garden-brew/admin/");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
