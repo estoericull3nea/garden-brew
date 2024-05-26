@@ -59,7 +59,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
     <script>
         function show_all_pending_orders() {
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', './ajax/orders/fetch_pending_orders.php', true);
+            xhr.open('POST', './ajax/orders/fetch_orders.php', true);
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText)
                 if (data) {
@@ -86,10 +86,11 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                           <td>${row.phone_number}</td>
                           <td>${row.address}</td>
                           <td>${row.payment_mode}</td>
-                          <td>${row.status}</td>
+                          <td class="${row.status === 'pending' ? `text-warning fw-bold` : row.status === 'approved' ? `text-primary fw-bold` : row.status === 'completed' ? `text-success fw-bold` : row.status === 'canceled' ? `text-danger fw-bold` : ``}" >${row.status}</td>
                           <td>${formatDateTime(row.order_date)}</td>
-                          <td>
-                                ${row.status === 'pending' ? `<button onclick="mark_as_approved('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Approved</button>` : ``}
+                          <td class="d-flex align-items-center justify-content-center gap-1">
+                                ${row.status === 'pending' ? `<button onclick="mark_as_approved('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Approved</button>` : row.status === 'approved' ? `<button onclick="mark_as_ongoing('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Go</button>` : row.status === 'ongoing' ? `<button onclick="mark_as_complete('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Mark as Complete</button>` : ``}
+                                <button class="btn btn-sm btn-outline-dark smallest rounded-5">View</button>
                           </td>
 
                         `;
@@ -117,6 +118,42 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                 if (xhr.responseText === '1') {
                     show_all_pending_orders()
                     display_custom_toast('Approved', 'success', 2000)
+                }
+            }
+            xhr.send(JSON.stringify({
+                order_id,
+                user_id
+            }))
+
+        }
+
+        function mark_as_ongoing(order_id, user_id) {
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/orders/mark_as_ongoing.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.responseText === '1') {
+                    show_all_pending_orders()
+                    display_custom_toast('On Going', 'success', 2000)
+                }
+            }
+            xhr.send(JSON.stringify({
+                order_id,
+                user_id
+            }))
+
+        }
+
+        function mark_as_complete(order_id, user_id) {
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/orders/mark_as_complete.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.responseText === '1') {
+                    show_all_pending_orders()
+                    display_custom_toast('Completed', 'success', 2000)
                 }
             }
             xhr.send(JSON.stringify({

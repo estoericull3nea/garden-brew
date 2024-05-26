@@ -8,7 +8,6 @@ $sql = "
     SELECT o.*, u.*
     FROM orders AS o
     JOIN users AS u ON o.user_id = u.user_id
-    WHERE o.status != 'canceled'
 ";
 
 // Execute the query
