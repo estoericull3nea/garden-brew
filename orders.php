@@ -66,8 +66,14 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                     <div class="mt-5 text-center row" id="pending_card_container">
                     </div>
                 </div>
-                <div class="tab-pane fade" id="nav-approved" role="tabpanel" aria-labelledby="nav-approved-tab" tabindex="0">...</div>
-                <div class="tab-pane fade" id="nav-going" role="tabpanel" aria-labelledby="nav-going-tab" tabindex="0">...</div>
+                <div class="tab-pane fade" id="nav-approved" role="tabpanel" aria-labelledby="nav-approved-tab" tabindex="0">
+                    <div class="mt-5 text-center row" id="approved_card_container">
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-going" role="tabpanel" aria-labelledby="nav-going-tab" tabindex="0">
+                    <div class="mt-5 text-center row" id="ongoing_card_container">
+                    </div>
+                </div>
                 <div class="tab-pane fade" id="nav-delivered" role="tabpanel" aria-labelledby="nav-delivered-tab" tabindex="0">...</div>
                 <div class="tab-pane fade" id="nav-canceled" role="tabpanel" aria-labelledby="nav-canceled-tab" tabindex="0">
                     <div class="mt-5 text-center row" id="canceled_card_container">
@@ -141,11 +147,11 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                     total_sum += parseFloat(prod.prod_total);
                 });
                 const total_row = `
-            <tr>
-                <td colspan="4" style="text-align: right; font-weight: bold;">Total:</td>
-                <td style="font-weight: bold;">${total_sum.toFixed(2)}</td>
-            </tr>
-        `;
+                            <tr>
+                                <td colspan="4" style="text-align: right; font-weight: bold;">Total:</td>
+                                <td style="font-weight: bold;">${total_sum.toFixed(2)}</td>
+                            </tr>
+                        `;
                 modal_table_body_view_items.innerHTML += total_row;
             };
             xhr.send(JSON.stringify({
@@ -207,9 +213,85 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             xhr.send();
         }
 
+        function fetch_approved_order() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/order/fetch_approved_order.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                const data = JSON.parse(xhr.responseText);
+
+                const approved_card_container = document.getElementById('approved_card_container');
+                approved_card_container.innerHTML = '';
+
+                data.forEach(product => {
+                    const order_card = `
+                        <div class="col-12 col-md-6 col-lg-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Order ID: ${product.order_id}</h5>
+                                    <h5 class="card-title">Status: ${product.status}</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><span class="fw-semibold">Customer Name:</span> ${product.fname} ${product.lname}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Customer Address:</span> ${product.address}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Customer Phone Number:</span> ${product.phone_number}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Order Date:</span> ${formatDateTime(product.order_date)}</li>
+                                </ul>
+                                <div class="card-body">
+                                    <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
+                                    <a href="#" class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    approved_card_container.innerHTML += order_card;
+                });
+            };
+            xhr.send();
+        }
+
+        function fetch_ongoing_order() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/order/fetch_ongoing_order.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                const data = JSON.parse(xhr.responseText);
+
+                const ongoing_card_container = document.getElementById('ongoing_card_container');
+                ongoing_card_container.innerHTML = '';
+
+                data.forEach(product => {
+                    const order_card = `
+                        <div class="col-12 col-md-6 col-lg-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Order ID: ${product.order_id}</h5>
+                                    <h5 class="card-title">Status: ${product.status}</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><span class="fw-semibold">Customer Name:</span> ${product.fname} ${product.lname}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Customer Address:</span> ${product.address}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Customer Phone Number:</span> ${product.phone_number}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Order Date:</span> ${formatDateTime(product.order_date)}</li>
+                                </ul>
+                                <div class="card-body">
+                                    <a href="#" class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</a>
+                                    <a href="#" class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    ongoing_card_container.innerHTML += order_card;
+                });
+            };
+            xhr.send();
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             fetch_pending_orders();
             fetch_canceled_orders();
+            fetch_approved_order()
+            fetch_ongoing_order()
         });
     </script>
 </body>

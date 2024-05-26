@@ -41,26 +41,8 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                 </div>
                 <div class="col">
                     <div class="box border p-2" style="width: 200px; height: auto;">
-                        <h6>Canceled Orders</h6>
-                        <h1 class="text-center" id="count_canceled_orders"></h1>
-                        <div class="text-end">
-                            <a href="#" class="text-end text-black fw-medium">See More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="box border p-2" style="width: 200px; height: auto;">
                         <h6>Approved Orders</h6>
                         <h1 class="text-center" id="count_approved_orders"></h1>
-                        <div class="text-end">
-                            <a href="#" class="text-end text-black fw-medium">See More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="box border p-2" style="width: 200px; height: auto;">
-                        <h6>Delivered Orders</h6>
-                        <h1 class="text-center" id="count_delivered_orders"></h1>
                         <div class="text-end">
                             <a href="#" class="text-end text-black fw-medium">See More</a>
                         </div>
@@ -75,6 +57,27 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                         </div>
                     </div>
                 </div>
+
+                <div class="col">
+                    <div class="box border p-2" style="width: 200px; height: auto;">
+                        <h6>Canceled Orders</h6>
+                        <h1 class="text-center" id="count_canceled_orders"></h1>
+                        <div class="text-end">
+                            <a href="#" class="text-end text-black fw-medium">See More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="box border p-2" style="width: 200px; height: auto;">
+                        <h6>Delivered Orders</h6>
+                        <h1 class="text-center" id="count_delivered_orders"></h1>
+                        <div class="text-end">
+                            <a href="#" class="text-end text-black fw-medium">See More</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <hr>
