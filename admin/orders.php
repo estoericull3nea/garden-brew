@@ -20,6 +20,13 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
 
 <body>
 
+
+    <div id="customMessage" class="custom-message d-flex align-items-center justify-content-between gap-2 ">
+        <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-normal text-center"></p>
+        <span id="closeButton"></span>
+    </div>
+
+
     <main class="d-flex flex-nowrap">
         <?php require './partials/aside.php'; ?>
         <div class="w-100 mt-5">
@@ -72,7 +79,6 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
 
 
                     data.forEach(function(row) {
-                        console.log(row);
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
                           <td>${row.order_id}</td>
@@ -83,7 +89,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                           <td>${row.status}</td>
                           <td>${formatDateTime(row.order_date)}</td>
                           <td>
-                                ${row.status === 'pending' ? `<button class="btn btn-sm btn-outline-dark smallest rounded-5">Approved</button>` : ``}
+                                ${row.status === 'pending' ? `<button onclick="mark_as_approved('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Approved</button>` : ``}
                           </td>
 
                         `;
@@ -100,6 +106,24 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                 }
             }
             xhr.send()
+        }
+
+        function mark_as_approved(order_id, user_id) {
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/orders/mark_as_approved.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.responseText === '1') {
+                    show_all_pending_orders()
+                    display_custom_toast('Approved', 'success', 2000)
+                }
+            }
+            xhr.send(JSON.stringify({
+                order_id,
+                user_id
+            }))
+
         }
 
         document.addEventListener("DOMContentLoaded", () => {
