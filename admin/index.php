@@ -85,7 +85,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             <div class="row w-100 mt-5 ms-1">
                 <div class="col-sm-12 col-md-6 col-lg-3 w-100">
                     <table class="table table-hover text-center align-middle border caption-top">
-                        <caption>Top 5 Best Seller Milktea</caption>
+                        <caption>Top 5 Best Seller Products</caption>
                         <thead>
                             <tr>
                                 <th scope="col">#</th>

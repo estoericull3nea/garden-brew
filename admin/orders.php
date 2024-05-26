@@ -55,6 +55,34 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
         </div>
     </main>
 
+    <!-- Modal view single order -->
+    <div class="modal fade" id="modal_view_single_order" tabindex="-1" aria-labelledby="modal_view_single_orderLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <table class="table text-center align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Product Price</th>
+                                <th scope="col">Product Size</th>
+                                <th scope="col">Product Quantity</th>
+                                <th scope="col">Product Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table_modal_showing_items">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-dark" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <script>
         function show_all_pending_orders() {
@@ -90,16 +118,11 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                           <td>${formatDateTime(row.order_date)}</td>
                           <td class="d-flex align-items-center justify-content-center gap-1">
                                 ${row.status === 'pending' ? `<button onclick="mark_as_approved('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Approved</button>` : row.status === 'approved' ? `<button onclick="mark_as_ongoing('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Go</button>` : row.status === 'ongoing' ? `<button onclick="mark_as_complete('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Mark as Delivered</button>` : ``}
-                                <button class="btn btn-sm btn-outline-dark smallest rounded-5">View</button>
+                                <button class="btn btn-sm btn-outline-dark smallest rounded-5" onclick="view_single_order('${row.order_id}','${row.user_id}')" data-bs-toggle="modal" data-bs-target="#modal_view_single_order">View Items</button>
                           </td>
-
                         `;
-
-
                         tbody.appendChild(tr);
                     });
-
-
                     // Reinitialize DataTables after adding rows
                     var dataTable = new DataTable(table, {
                         stateSave: true,
@@ -108,6 +131,46 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             }
             xhr.send()
         }
+
+        function view_single_order(order_id, user_id) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/orders/view_single_order.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                const data = JSON.parse(xhr.responseText);
+                const table_modal_showing_items = document.getElementById('table_modal_showing_items');
+                table_modal_showing_items.innerHTML = '';
+
+                let total_price = 0;
+
+                data.forEach(item => {
+                    const card = `
+                <tr>
+                    <td>${item.prod_name}</td>
+                    <td>${item.prod_price}</td>
+                    <td>${item.prod_size}</td>
+                    <td>${item.prod_qty}</td>
+                    <td>${item.prod_total}</td>
+                </tr>
+            `;
+                    table_modal_showing_items.innerHTML += card;
+                    total_price += parseFloat(item.prod_total); // Accumulate the total price
+                });
+
+                // Add a row for the total price
+                const totalRow = `
+                    <tr class="text-end">
+                        <td colspan="5"><strong>Total Price: ${total_price.toFixed(2)}</strong></td>
+                    </tr>
+                `;
+                table_modal_showing_items.innerHTML += totalRow;
+            };
+            xhr.send(JSON.stringify({
+                order_id,
+                user_id
+            }));
+        }
+
 
         function mark_as_approved(order_id, user_id) {
 
