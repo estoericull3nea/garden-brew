@@ -29,12 +29,13 @@
                 Products
             </a>
         </li>
-
+    
         <li>
             <a href="http://localhost/garden-brew/admin/customers.php" class="nav-link link-body-emphasis" data-page="customers">
                 Customer Info
             </a>
         </li>
+
         <li>
             <a href="http://localhost/garden-brew/admin/reports.php" class="nav-link link-body-emphasis" data-page="reports">
                 Reports
