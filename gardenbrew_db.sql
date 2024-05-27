@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 26, 2024 at 06:08 AM
+-- Generation Time: May 28, 2024 at 01:31 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -69,25 +69,32 @@ CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `payment_mode` varchar(100) NOT NULL,
-  `status` enum('pending','approved','ongoing','completed','canceled') NOT NULL DEFAULT 'pending',
+  `status` enum('pending','approved','ongoing','delivered','canceled','denied') NOT NULL DEFAULT 'pending',
   `order_date` datetime NOT NULL DEFAULT current_timestamp(),
   `date_approved` datetime DEFAULT NULL,
   `canceled_at` datetime DEFAULT NULL,
-  `date_completed` datetime DEFAULT NULL
+  `date_delivered` datetime DEFAULT NULL,
+  `date_ongoing_started` datetime DEFAULT NULL,
+  `date_denied` datetime DEFAULT NULL,
+  `why_denied` varchar(200) DEFAULT NULL,
+  `user_feedback` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`order_id`, `user_id`, `payment_mode`, `status`, `order_date`, `date_approved`, `canceled_at`, `date_completed`) VALUES
-(19, 4, 'gcash', 'canceled', '2024-05-26 09:56:06', NULL, '2024-05-26 10:09:49', NULL),
-(20, 4, 'cod', 'completed', '2024-05-26 09:56:37', NULL, NULL, NULL),
-(21, 4, 'cod', 'completed', '2024-05-26 10:09:45', '2024-05-26 12:03:50', NULL, '2024-05-26 12:07:46'),
-(22, 4, 'gcash', 'completed', '2024-05-26 10:15:13', '0000-00-00 00:00:00', NULL, '2024-05-26 12:07:45'),
-(23, 4, 'cod', 'completed', '2024-05-26 10:43:11', NULL, NULL, '2024-05-26 12:07:44'),
-(24, 4, 'cod', 'completed', '2024-05-26 11:04:22', NULL, NULL, '2024-05-26 12:06:57'),
-(25, 4, 'cod', 'completed', '2024-05-26 12:05:37', '2024-05-26 12:07:38', NULL, '2024-05-26 12:07:41');
+INSERT INTO `orders` (`order_id`, `user_id`, `payment_mode`, `status`, `order_date`, `date_approved`, `canceled_at`, `date_delivered`, `date_ongoing_started`, `date_denied`, `why_denied`, `user_feedback`) VALUES
+(48, 24, 'cod', 'delivered', '2024-05-27 21:12:45', '2024-05-27 21:13:35', NULL, '2024-05-27 21:13:36', '2024-05-27 21:13:36', NULL, NULL, 'hello'),
+(49, 24, 'cod', 'delivered', '2024-05-27 21:31:34', '2024-05-27 21:32:09', NULL, '2024-05-27 21:32:18', '2024-05-27 21:32:18', NULL, NULL, 'good'),
+(56, 24, 'cod', 'denied', '2024-05-27 22:27:21', NULL, NULL, NULL, NULL, '2024-05-27 22:45:52', 'spamming', NULL),
+(57, 24, 'cod', 'delivered', '2024-05-27 23:37:46', '2024-05-27 23:37:53', NULL, '2024-05-27 23:37:55', '2024-05-27 23:37:55', NULL, NULL, 'this is my feedback for you'),
+(58, 24, 'cod', 'delivered', '2024-05-27 23:57:40', '2024-05-27 23:57:50', NULL, '2024-05-27 23:58:22', '2024-05-27 23:58:14', NULL, NULL, NULL),
+(59, 24, 'cod', 'delivered', '2024-05-27 23:59:18', '2024-05-27 23:59:51', NULL, '2024-05-28 06:28:15', '2024-05-27 23:59:52', NULL, NULL, NULL),
+(60, 24, 'cod', 'canceled', '2024-05-28 06:16:39', NULL, '2024-05-28 06:16:50', NULL, NULL, NULL, NULL, NULL),
+(61, 24, 'cod', 'canceled', '2024-05-28 06:20:23', NULL, '2024-05-28 06:22:54', NULL, NULL, NULL, NULL, NULL),
+(62, 24, 'cod', 'delivered', '2024-05-28 06:24:40', '2024-05-28 06:25:43', NULL, '2024-05-28 06:26:05', '2024-05-28 06:26:00', NULL, NULL, NULL),
+(63, 24, 'cod', 'pending', '2024-05-28 06:28:33', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -113,46 +120,31 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`order_items_id`, `order_id`, `prod_id`, `prod_name`, `prod_price`, `prod_size`, `prod_qty`, `prod_total`, `prod_img`, `user_id`) VALUES
-(8, 5, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 4),
-(9, 5, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 4),
-(10, 5, 3, 'Matcha', 39, '16oz', 1, 39, 'matcha.png', 4),
-(11, 5, 4, 'Strawberry', 39, '16oz', 1, 39, 'strawberry.png', 4),
-(12, 5, 5, 'Wintermelon', 39, '16oz', 1, 39, 'wintermelon.png', 4),
-(13, 6, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 4),
-(14, 6, 3, 'Matcha', 39, '16oz', 1, 39, 'matcha.png', 4),
-(15, 7, 3, 'Matcha', 39, '16oz', 1, 39, 'matcha.png', 4),
-(16, 7, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 4),
-(17, 8, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 4),
-(18, 8, 3, 'Matcha', 39, '16oz', 1, 39, 'matcha.png', 4),
-(19, 9, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 4),
-(20, 10, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 4),
-(21, 11, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 4),
-(22, 12, 3, 'Matcha', 39, '16oz', 1, 39, 'matcha.png', 4),
-(23, 13, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 4),
-(24, 13, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 4),
-(25, 13, 3, 'Matcha', 39, '16oz', 1, 39, 'matcha.png', 4),
-(26, 13, 4, 'Strawberry', 39, '16oz', 1, 39, 'strawberry.png', 4),
-(27, 13, 5, 'Wintermelon', 39, '16oz', 1, 39, 'wintermelon.png', 4),
-(28, 14, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 4),
-(29, 14, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 4),
-(30, 14, 3, 'Matcha', 39, '16oz', 1, 39, 'matcha.png', 4),
-(31, 14, 4, 'Strawberry', 39, '16oz', 1, 39, 'strawberry.png', 4),
-(32, 14, 5, 'Wintermelon', 39, '16oz', 1, 39, 'wintermelon.png', 4),
-(33, 15, 15, 'Caffe Latte', 39, '8oz', 4, 156, 'caffe_latte.png', 5),
-(34, 16, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 14),
-(35, 17, 3, 'Matcha', 39, '16oz', 2, 78, 'matcha.png', 4),
-(36, 18, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 4),
-(37, 19, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 4),
-(38, 19, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 4),
-(39, 19, 5, 'Wintermelon', 39, '16oz', 1, 39, 'wintermelon.png', 4),
-(40, 19, 4, 'Strawberry', 39, '16oz', 1, 39, 'strawberry.png', 4),
-(41, 20, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 4),
-(42, 21, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 4),
-(43, 21, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 4),
-(44, 22, 2, 'Dark Chocolate', 39, '16oz', 6, 234, 'dark_choco.png', 4),
-(45, 23, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 4),
-(46, 24, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 4),
-(47, 25, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 4);
+(105, 48, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 24),
+(106, 48, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 24),
+(107, 48, 3, 'Matcha', 39, '16oz', 1, 39, 'matcha.png', 24),
+(108, 48, 4, 'Strawberry', 39, '16oz', 1, 39, 'strawberry.png', 24),
+(109, 48, 5, 'Wintermelon', 39, '16oz', 1, 39, 'wintermelon.png', 24),
+(110, 49, 14, 'Espresso Latte', 39, '8oz', 1, 39, 'espresso_latte.png', 24),
+(111, 49, 15, 'Caffe Latte', 39, '8oz', 1, 39, 'caffe_latte.png', 24),
+(112, 49, 16, 'Cappuccino', 39, '8oz', 1, 39, 'cappuccino.png', 24),
+(113, 49, 17, 'Caramel Macchiato', 39, '8oz', 5, 195, 'caramel_macchiato.png', 24),
+(114, 49, 18, 'Caffe Mocha', 39, '8oz', 1, 39, 'caffe_mocha.png', 24),
+(115, 50, 6, 'Strawberrry Cream', 69, '22oz', 2, 138, 'strawberrry_cream.png', 24),
+(116, 51, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 24),
+(117, 52, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 24),
+(118, 53, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 24),
+(119, 54, 1, 'Cookies and Cream', 39, '16oz', 1, 39, 'cookies_and_cream.png', 24),
+(120, 55, 4, 'Strawberry', 39, '16oz', 1, 39, 'strawberry.png', 24),
+(121, 56, 10, 'Double Cookies & Cream', 49, '22oz', 1, 49, 'double_cookies_cream.png', 24),
+(122, 56, 11, 'Premium Dark Chocolate', 49, '22oz', 1, 49, 'premium_dark_chocolate.png', 24),
+(123, 57, 109, 'qwe qwe', 49, '22oz', 1, 49, 'gb_latest.drawio.png', 24),
+(124, 58, 3, 'Matcha', 39, '16oz', 1, 39, 'matcha.png', 24),
+(125, 59, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 24),
+(126, 60, 3, 'Matcha', 39, '16oz', 1, 39, 'matcha.png', 24),
+(127, 61, 2, 'Dark Chocolate', 39, '16oz', 2, 78, 'dark_choco.png', 24),
+(128, 62, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 24),
+(129, 63, 1, 'Cookies and Cream', 39, '16oz', 4, 156, 'cookies_and_cream.png', 24);
 
 -- --------------------------------------------------------
 
@@ -194,17 +186,18 @@ INSERT INTO `products` (`prod_id`, `prod_name`, `prod_price`, `prod_img`, `prod_
 (14, 'Espresso Latte', 0, 'espresso_latte.png', '8', 1, 'Hot', 'A bold blend of creamy milk tea and robust espresso for a perfect pick-me-up', '2024-05-25 15:41:10', '2024-05-25 16:57:02'),
 (15, 'Caffe Latte', 0, 'caffe_latte.png', '8', 1, 'Hot', 'A smooth blend of creamy milk tea and rich, aromatic coffee', '2024-05-25 15:44:04', '2024-05-25 16:57:32'),
 (16, 'Cappuccino', 0, 'cappuccino.png', '8', 1, 'Hot', 'A perfect blend of creamy milk tea and bold, frothy cappuccino', '2024-05-25 15:44:04', '2024-05-25 16:57:49'),
-(17, 'Caramel Macchiato', 0, 'caramel_macchiato.png', '8', 1, 'Hot', 'Caramel Macchiato', '2024-05-25 15:44:04', '2024-05-25 16:57:57'),
-(18, 'Caffe Mocha', 0, 'caffe_mocha.png', '8', 1, 'Hot', 'Caffe Mocha', '2024-05-25 15:44:04', '2024-05-25 16:58:08'),
+(17, 'Caramel Macchiato', 0, 'caramel_macchiato.png', '8', 1, 'Hot', 'espresso-based drink with vanilla syrup, steamed milk, and caramel sauce drizzled on top', '2024-05-25 15:44:04', '2024-05-26 23:50:14'),
+(18, 'Caffe Mocha', 0, 'caffe_mocha.png', '8', 1, 'Hot', 'espresso-based drink with steamed milk, chocolate syrup, and often topped with whipped cream', '2024-05-25 15:44:04', '2024-05-26 23:50:34'),
 (19, 'Cheese', 0, 'cheese.png', 'Single', 1, 'Fries', 'Crispy golden fries topped with a generous layer of creamy, melted cheese', '2024-05-25 18:37:26', '2024-05-25 19:13:43'),
 (20, 'BBQ', 0, 'bbq.png', 'Single', 1, 'Fries', 'Crispy golden fries seasoned with bold and tangy BBQ flavor', '2024-05-25 18:38:33', '2024-05-25 19:13:47'),
 (21, 'Sour Cream', 0, 'sour_cream.png', 'Single', 1, 'Fries', 'Crispy golden fries coated with a tangy and savory sour cream seasoning', '2024-05-25 18:38:33', '2024-05-25 19:13:52'),
-(22, 'Cheesy Overload', 0, 'cheesy__overload.png', 'Solo', 1, 'Pizza', NULL, '2024-05-25 19:09:58', '2024-05-25 19:14:06'),
-(23, 'Ham & Cheese', 0, 'ham_cheese.png', 'Solo', 1, 'Pizza', NULL, '2024-05-25 19:09:58', '2024-05-25 19:14:10'),
-(24, 'Bacon Ham and Cheese', 0, 'bacon_ham_cheese.png', 'Solo', 1, 'Pizza', NULL, '2024-05-25 19:09:58', '2024-05-25 19:14:14'),
-(25, 'Pepperoni', 0, 'pepperoni.png', 'Solo', 1, 'Pizza', NULL, '2024-05-25 19:09:58', '2024-05-25 19:14:17'),
-(26, 'Four Seasons', 0, 'four_seasons.png', 'Solo', 1, 'Pizza', NULL, '2024-05-25 19:09:58', '2024-05-25 19:14:21'),
-(27, 'Pork Salami', 0, 'pork_salami.png', 'Solo', 1, 'Pizza', NULL, '2024-05-25 19:09:58', '2024-05-25 19:14:24');
+(22, 'Cheesy Overload', 0, 'cheesy__overload.png', 'Solo', 1, 'Pizza', 'Cheesy Overload pizza: a rich, gooey blend of cheeses on a classic crust, perfect for cheese lovers', '2024-05-25 19:09:58', '2024-05-26 23:39:40'),
+(23, 'Ham & Cheese', 0, 'ham_cheese.png', 'Solo', 1, 'Pizza', 'Ham & Cheese pizza: savory ham and melted cheese on a classic crust, a perfect pairing', '2024-05-25 19:09:58', '2024-05-26 23:40:11'),
+(24, 'Bacon Ham and Cheese', 0, 'bacon_ham_cheese.png', 'Solo', 1, 'Pizza', 'Bacon Ham and Cheese pizza: crispy bacon, savory ham, and melted cheese on a classic crust', '2024-05-25 19:09:58', '2024-05-26 23:40:35'),
+(25, 'Pepperoni', 0, 'pepperoni.png', 'Solo', 1, 'Pizza', 'Pepperoni pizza: classic crust topped with spicy pepperoni and melted cheese', '2024-05-25 19:09:58', '2024-05-26 23:41:03'),
+(26, 'Four Seasons', 0, 'four_seasons.png', 'Solo', 1, 'Pizza', 'Four Seasons pizza: a classic crust divided into sections with diverse toppings representing the four seasons', '2024-05-25 19:09:58', '2024-05-26 23:41:26'),
+(27, 'Pork Salami', 0, 'pork_salami.png', 'Solo', 1, 'Pizza', 'Pork Salami pizza: savory pork salami and melted cheese on a classic crust', '2024-05-25 19:09:58', '2024-05-26 23:41:42'),
+(109, 'qwe qwe', 49, 'gb_latest.drawio.png', '22', 1, 'Classic', 'qwe', '2024-05-27 14:01:55', '2024-05-27 14:01:55');
 
 -- --------------------------------------------------------
 
@@ -230,11 +223,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `fname`, `lname`, `username`, `email`, `password`, `phone_number`, `address`, `created_at`, `updated_at`) VALUES
-(4, 'Ericson', 'Palisoc', 'cullen', '', '$2y$10$q54pcWOu43pbmOUjcBG7OuE.eYrgyKqfCG2jfUh8L3Hw4aSEUniAO', '0915803565', 'Urbiztondo', '2024-05-24 01:57:11', '2024-05-24 07:42:43'),
-(5, 'Leon', 'Balverde', 'poks', '', '$2y$10$hO23dDrUmqx2cOp5VRFhFelfFus4C50Gs5UW.FZUFNi.QBE6dJPm6', '091580353563', 'Luna', '2024-05-24 06:17:34', '2024-05-24 06:17:34'),
-(6, 'asdf', 'sasdf', 'asdfadfad', '', '$2y$10$QHl0crCxAFJXD2OYSeP8SOmGtwj0wDD8uxg4Lj4OBZpazM3BxfInq', '123123123', 'asdfadfadf', '2024-05-24 07:22:29', '2024-05-24 07:22:29'),
-(10, 'Kristine', 'Pacania', 'kristine', '', '$2y$10$p7goU2y5C9eBT7FbcTOlw.cBf/dJ9eBl5IIPboMam/4TftUQWAXIm', '1234123414', 'SCCP', '2024-05-24 07:27:59', '2024-05-24 07:27:59'),
-(14, 'qwe', 'qwe', 'qwe', '', '$2y$10$Gv6RbgeveTZo2D9qQDlNyO.26q42JucR92KPFNNwd6HJ1yG.kGgT.', '123123', 'qweqwe', '2024-05-26 01:32:09', '2024-05-26 01:32:09');
+(24, 'Kristine', 'Pacania', 'kristine', '', '$2y$10$iS1rUvryvNPk8qg7yaesdeahgBaie8FkhVMePtP9Ih5VR.dktdp/O', '09158033561', 'Doyong, SCCP', '2024-05-27 21:12:31', '2024-05-27 21:12:31'),
+(25, 'Arabella', 'Cancino', 'arabella', '', '$2y$10$bA3jCpqW4.vCEA3Tnc6ZOO2SJC0GQXcslrx.CrGS1XhEveP3nrCJ6', '53495024234', 'Matagdem, SCCP', '2024-05-28 00:05:07', '2024-05-28 00:05:07'),
+(26, 'Ericson', 'Palisoc', 'cullen', '', '$2y$10$r0EWStXF3Sp8Whs4/33.hePsC58xxwpN/65FMURze2lmLUmB87ZpS', '84758239408', 'Urbiztondo', '2024-05-28 00:05:48', '2024-05-28 00:05:48');
 
 --
 -- Indexes for dumped tables
@@ -290,31 +281,31 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=315;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=408;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `order_items_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `order_items_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `prod_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+  MODIFY `prod_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
