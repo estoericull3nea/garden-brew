@@ -13,8 +13,6 @@
 </head>
 
 <body>
-
-
     <div id="customMessage" class="custom-message d-flex align-items-center justify-content-between gap-2 ">
         <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-normal text-center"></p>
         <span id="closeButton"></span>
@@ -23,7 +21,9 @@
     <main class="d-flex flex-nowrap">
         <?php require './partials/aside.php'; ?>
         <div>
-            <button class="btn btn-primary my-3" data-toggle="modal" data-target="#addProductModal">Add Product</button>
+            <div class="text-end me-2">
+                <button class="btn btn-pink my-3" data-toggle="modal" data-target="#addProductModal">Add Product</button>
+            </div>
             <div class="table-responsive w-100 p-3 ">
                 <table id="show_users_table" class="caption-top border-0 my-5" style="width:100%; font-size: .7rem;">
                     <caption>List of Products</caption>
@@ -65,7 +65,7 @@
                         </div>
                         <div class="form-group">
                             <label for="prod_price">Product Price</label>
-                            <input type="text" class="form-control" id="prod_price" name="prod_price" required>
+                            <input type="text" class="form-control" id="prod_price" name="prod_price" required placeholder="39 for 16oz, 49 for 22oz">
                         </div>
                         <div class="form-group">
                             <label for="prod_img">Product Image</label>
@@ -73,7 +73,7 @@
                         </div>
                         <div class="form-group">
                             <label for="prod_size">Product Size</label>
-                            <input type="text" class="form-control" id="prod_size" name="prod_size" required>
+                            <input type="text" class="form-control" id="prod_size" name="prod_size" required placeholder="16 or 22">
                         </div>
                         <div class="form-group">
                             <label for="is_available">Product Available (1 for Yes, 0 for No)</label>
@@ -211,10 +211,12 @@
                             const prod_id = this.getAttribute('data-id');
                             const product = data.find(prod => prod.prod_id == prod_id);
 
+                            console.log(product); // Debugging line to ensure the correct product data is fetched
+
                             document.getElementById('edit_prod_id').value = product.prod_id;
                             document.getElementById('edit_prod_name').value = product.prod_name;
                             document.getElementById('edit_prod_price').value = product.prod_price;
-                            document.getElementById('edit_prod_img').value = product.prod_img;
+                            document.getElementById('edit_prod_img').value = product.prod_img; // Note: This might not work for file input
                             document.getElementById('edit_prod_size').value = product.prod_size;
                             document.getElementById('edit_is_available').value = product.is_available;
                             document.getElementById('edit_category').value = product.category;
@@ -259,13 +261,13 @@
             xhr.onload = function() {
                 const response = JSON.parse(xhr.responseText);
                 if (response.status === 'success') {
-                    alert('Product added successfully.');
                     $('#addProductModal').modal('hide');
+                    display_custom_toast('Product added successfully', 'success', 2000);
                     show_all_prods();
+                    document.getElementById('addProductForm').reset();
                 } else {
-                    alert('Failed to add product.');
+                    display_custom_toast('Failed to add product', 'danger', 2000);
                 }
-
             }
             xhr.send(formData);
         });
@@ -278,11 +280,11 @@
             xhr.onload = function() {
                 const response = JSON.parse(xhr.responseText);
                 if (response.status === 'success') {
-                    alert('Product updated successfully.');
                     $('#editProductModal').modal('hide');
+                    display_custom_toast('Product updated successfully', 'success', 2000);
                     show_all_prods();
                 } else {
-                    alert('Failed to update product.');
+                    display_custom_toast('Failed to update product', 'danger', 2000);
                 }
             }
             xhr.send(formData);

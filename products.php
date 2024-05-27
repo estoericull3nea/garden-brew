@@ -166,6 +166,7 @@ session_start();
 
                 const data = JSON.parse(xhr.responseText);
                 data.forEach(product => {
+                    console.log(product);
                     const product_card = `
                     <div class="col-12 col-md-6 col-xl-4 mb-3">
                         <div class="card" role="button">
@@ -180,8 +181,9 @@ session_start();
                                             <div class="mb-2">
                                                 <label for="size-${product.prod_id}" class="form-label smaller">Select size</label>
                                                 <select id="size-${product.prod_id}" name="size" class="form-select shadow-none smaller" role="button" onchange="updatePrice('${product.prod_id}')">
-                                                    <option role="button" value="16">16oz</option>
-                                                    <option role="button" value="22">22oz</option>
+                                                   ${product.prod_size == '16' ?  `   <option role="button" value="16">16oz</option>` : `  <option role="button" value="22">22oz</option>`}
+                                                   ${product.prod_size == '22' ?  `   <option role="button" value="16">16oz</option>` : `  <option role="button" value="22">22oz</option>`}
+                                                  
                                                 </select>
                                             </div>
                                         </div>
