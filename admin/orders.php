@@ -88,6 +88,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                                     <th scope="col">Customer FullName</th>
                                     <th scope="col">Customer Phone Number</th>
                                     <th scope="col">Customer Address</th>
+                                    <th scope="col">Customer Feedback</th>
                                     <th scope="col">Payment Mode</th>
                                     <th scope="col">Product Name</th>
                                     <th scope="col">Product Price</th>
@@ -189,6 +190,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                                 <td>${item.fname} ${item.lname}</td>
                                 <td>${item.phone_number}</td>
                                 <td>${item.address}</td>
+                                <td>${item.user_feedback ? item.user_feedback : 'No Feedback Provided'}</td>
                                 <td>${item.payment_mode}</td>
                                 <td>${item.prod_name}</td>
                                 <td>${item.prod_price}</td>
@@ -200,7 +202,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                     } else {
                         customer_info += `
                             <tr>
-                                <td colspan="4"></td>
+                                <td colspan="5"></td>
                                 <td>${item.prod_name}</td>
                                 <td>${item.prod_price}</td>
                                 <td>${item.prod_size}</td>
@@ -214,7 +216,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
 
                 const totalRow = `
                     <tr>
-                        <td colspan="8" class="text-end"><strong>Total Price:</strong></td>
+                        <td colspan="9" class="text-end"><strong>Total Price:</strong></td>
                         <td><strong>${total_price.toFixed(2)}</strong></td>
                     </tr>
                 `;
@@ -222,7 +224,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
 
                 // Disable the print button if the status is pending
                 const printButton = document.getElementById('printButton');
-                if (status === 'pending') {
+                if (status === 'pending' || status === 'denied') {
                     printButton.disabled = true;
                 } else {
                     printButton.disabled = false;

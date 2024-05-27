@@ -48,6 +48,26 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
         </div>
     </div>
 
+
+    <!-- Feedback Modal -->
+    <div class="modal fade" id="modal_provide_feedback" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal_provide_feedbackLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal_provide_feedbackLabel">Provide Feedback</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="feedback_textarea" class="form-control" rows="4" placeholder="Enter your feedback here..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="submit_feedback()">Send Feedback</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="mt-5">
             <nav class="d-flex justify-content-center">
@@ -131,16 +151,16 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
 
 
     <script>
+        let currentOrderID;
+
         function fetch_pending_orders() {
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './ajax/order/get_pending_orders.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText);
-
                 const pending_card_container = document.getElementById('pending_card_container');
                 pending_card_container.innerHTML = '';
-
                 data.forEach(product => {
                     const order_card = `
                         <div class="col-12 col-md-6 col-lg-4 mb-4">
@@ -174,12 +194,9 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText);
-
                 let total_sum = 0;
-
                 const modal_table_body_view_items = document.getElementById('modal_table_body_view_items');
                 modal_table_body_view_items.innerHTML = '';
-
                 data.forEach(prod => {
                     const order_cart = `
                         <tr>
@@ -194,11 +211,11 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                     total_sum += parseFloat(prod.prod_total);
                 });
                 const total_row = `
-                            <tr>
-                                <td colspan="4" style="text-align: right; font-weight: bold;">Total:</td>
-                                <td style="font-weight: bold;">${total_sum.toFixed(2)}</td>
-                            </tr>
-                        `;
+                    <tr>
+                        <td colspan="4" style="text-align: right; font-weight: bold;">Total:</td>
+                        <td style="font-weight: bold;">${total_sum.toFixed(2)}</td>
+                    </tr>
+                `;
                 modal_table_body_view_items.innerHTML += total_row;
             };
             xhr.send(JSON.stringify({
@@ -229,10 +246,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText);
-
                 const canceled_card_container = document.getElementById('canceled_card_container');
                 canceled_card_container.innerHTML = '';
-
                 data.forEach(product => {
                     const order_card = `
                         <div class="col-12 col-md-6 col-lg-4 mb-4">
@@ -240,7 +255,6 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                                 <div class="card-body">
                                     <h5 class="card-title">Order ID: ${product.order_id}</h5>
                                     <h5 class="card-title">Status: <span class="text-danger fs-5 fw-bold"> ${capitalizeFirstLetter(product.status)}</span></h5>
-
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><span class="fw-semibold">Customer Name:</span> ${product.fname} ${product.lname}</li>
@@ -267,10 +281,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText);
-
                 const approved_card_container = document.getElementById('approved_card_container');
                 approved_card_container.innerHTML = '';
-
                 data.forEach(product => {
                     const order_card = `
                         <div class="col-12 col-md-6 col-lg-4 mb-4">
@@ -278,7 +290,6 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                                 <div class="card-body">
                                     <h5 class="card-title">Order ID: ${product.order_id}</h5>
                                     <h5 class="card-title">Status: <span class="text-primary fs-5 fw-bold"> ${capitalizeFirstLetter(product.status)}</span></h5>
-
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><span class="fw-semibold">Customer Name:</span> ${product.fname} ${product.lname}</li>
@@ -306,10 +317,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText);
-
                 const ongoing_card_container = document.getElementById('ongoing_card_container');
                 ongoing_card_container.innerHTML = '';
-
                 data.forEach(product => {
                     const order_card = `
                         <div class="col-12 col-md-6 col-lg-4 mb-4">
@@ -317,7 +326,6 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                                 <div class="card-body">
                                     <h5 class="card-title">Order ID: ${product.order_id}</h5>
                                     <h5 class="card-title">Status: <span class="text-secondary fs-5 fw-bold"> ${capitalizeFirstLetter(product.status)}</span></h5>
-
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><span class="fw-semibold">Customer Name:</span> ${product.fname} ${product.lname}</li>
@@ -345,11 +353,10 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText);
-
                 const fetch_delivered_order = document.getElementById('fetch_delivered_order');
                 fetch_delivered_order.innerHTML = '';
-
                 data.forEach(product => {
+                    console.log(product);
                     const order_card = `
                         <div class="col-12 col-md-6 col-lg-4 mb-4">
                             <div class="card">
@@ -365,10 +372,11 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                                     <li class="list-group-item"><span class="fw-semibold">Date Approved:</span> ${formatDateTime(product.date_approved)}</li>
                                     <li class="list-group-item"><span class="fw-semibold">Date Ongoing Started:</span> ${formatDateTime(product.date_ongoing_started)}</li>
                                     <li class="list-group-item"><span class="fw-semibold">Date Delivered:</span> ${formatDateTime(product.date_delivered)}</li>
+                                    ${product.user_feedback ? ` <li class="list-group-item"><span class="fw-semibold">Your Feedback:</span> ${product.user_feedback}</li>` : `<li class="list-group-item"><span class="fw-semibold">Your Feedback:</span> No Feedback Provided</li>`}
                                 </ul>
                                 <div class="card-body">
                                     <button class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</button>
-                                    ${product.status !== 'delivered' ? ` <button class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</button>` : ``}
+                                    ${!product.user_feedback ? `<button class="btn btn-sm btn-outline-pink card-link" onclick="make_feedback(${product.order_id})" data-bs-toggle="modal" data-bs-target="#modal_provide_feedback">Provide Feedback</button>` : ``}
                                 </div>
                             </div>
                         </div>
@@ -379,16 +387,43 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             xhr.send();
         }
 
+        function make_feedback(order_id) {
+            currentOrderID = order_id;
+        }
+
+        function submit_feedback() {
+            const feedback = document.getElementById('feedback_textarea').value;
+            if (!feedback) {
+                alert('Please enter your feedback before submitting.');
+                return;
+            }
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/order/make_feedback.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.responseText === '1') {
+                    display_custom_toast('Feedback submitted successfully', 'success', 2000);
+                    document.getElementById('feedback_textarea').value = '';
+                    hideModal('modal_provide_feedback')
+                    fetch_delivered_order()
+                } else {
+                    alert('Failed to submit feedback. Please try again.');
+                }
+            };
+            xhr.send(JSON.stringify({
+                order_id: currentOrderID,
+                feedback: feedback
+            }));
+        }
+
         function fetch_denied_order() {
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './ajax/order/fetch_denied_order.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText);
-
                 const fetch_denied_order = document.getElementById('denied_card_container');
                 fetch_denied_order.innerHTML = '';
-
                 data.forEach(product => {
                     const order_card = `
                         <div class="col-12 col-md-6 col-lg-4 mb-4">
@@ -481,16 +516,16 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
         document.addEventListener("DOMContentLoaded", () => {
             fetch_pending_orders();
             fetch_canceled_orders();
-            fetch_approved_order()
-            fetch_ongoing_order()
-            fetch_delivered_order()
-            count_pending()
-            count_approved()
-            count_ongoing()
-            count_canceled()
-            count_delivered()
-            count_denied()
-            fetch_denied_order()
+            fetch_approved_order();
+            fetch_ongoing_order();
+            fetch_delivered_order();
+            count_pending();
+            count_approved();
+            count_ongoing();
+            count_canceled();
+            count_delivered();
+            count_denied();
+            fetch_denied_order();
         });
     </script>
 </body>
