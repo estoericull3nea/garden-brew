@@ -58,11 +58,11 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <textarea id="feedback_textarea" class="form-control" rows="4" placeholder="Enter your feedback here..."></textarea>
+                    <textarea id="feedback_textarea" class="form-control shadow-none" rows="4" placeholder="Enter your feedback here..."></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="submit_feedback()">Send Feedback</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-pink" onclick="submit_feedback()">Send Feedback</button>
                 </div>
             </div>
         </div>
@@ -232,6 +232,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                     fetch_pending_orders();
                     fetch_canceled_orders();
                     get_pending_status();
+                    count_canceled()
+                    count_pending()
                     display_custom_toast('Canceled Successfully', 'success', 2000);
                 }
             };
@@ -356,7 +358,6 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 const fetch_delivered_order = document.getElementById('fetch_delivered_order');
                 fetch_delivered_order.innerHTML = '';
                 data.forEach(product => {
-                    console.log(product);
                     const order_card = `
                         <div class="col-12 col-md-6 col-lg-4 mb-4">
                             <div class="card">
@@ -394,9 +395,15 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
         function submit_feedback() {
             const feedback = document.getElementById('feedback_textarea').value;
             if (!feedback) {
-                alert('Please enter your feedback before submitting.');
+                display_custom_toast('Please enter your feedback before submitting', 'danger', 2000);
                 return;
             }
+
+            if (feedback.trim().length === 0) {
+                display_custom_toast('Please enter your feedback before submitting', 'danger', 2000);
+                return;
+            }
+
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './ajax/order/make_feedback.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -512,6 +519,21 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             };
             xhr.send()
         }
+
+        setInterval(() => {
+            fetch_pending_orders();
+            fetch_canceled_orders();
+            fetch_approved_order();
+            fetch_ongoing_order();
+            fetch_delivered_order();
+            count_pending();
+            count_approved();
+            count_ongoing();
+            count_canceled();
+            count_delivered();
+            count_denied();
+            fetch_denied_order();
+        }, 2000);
 
         document.addEventListener("DOMContentLoaded", () => {
             fetch_pending_orders();

@@ -224,7 +224,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
 
                 // Disable the print button if the status is pending
                 const printButton = document.getElementById('printButton');
-                if (status === 'pending' || status === 'denied') {
+                if (status === 'pending' ||status === 'denied') {
                     printButton.disabled = true;
                 } else {
                     printButton.disabled = false;
@@ -344,7 +344,6 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                     display_custom_toast('Denied', 'success', 2000);
                     hideModal('modal_mark_as_denied')
                 }
-                console.log(xhr.responseText);
             };
             xhr.send(JSON.stringify({
                 order_id,
@@ -353,6 +352,10 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             }));
         }
 
+
+        setInterval(() => {
+            show_all_pending_orders()
+        }, 2000);
 
         document.addEventListener("DOMContentLoaded", () => {
             show_all_pending_orders()
