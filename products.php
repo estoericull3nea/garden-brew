@@ -65,7 +65,7 @@ session_start();
     <?php require './partials/header.php'; ?>
 
     <div id="customMessage" class="custom-message d-flex align-items-center justify-content-between gap-2 ">
-        <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-normal text-center"></p>
+        <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-semibold text-center"></p>
         <span id="closeButton"></span>
     </div>
 
@@ -166,7 +166,6 @@ session_start();
 
                 const data = JSON.parse(xhr.responseText);
                 data.forEach(product => {
-                    console.log(product);
                     const product_card = `
                     <div class="col-12 col-md-6 col-xl-4 mb-3">
                         <div class="card" role="button">
@@ -373,7 +372,8 @@ session_start();
                 return
             }
 
-            const user_id = <?= json_encode($_SESSION['user_id']); ?>;
+            const user_id = <?= json_encode(isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '0'); ?>;
+
             const prod_name = form.closest('.card-body').querySelector('.card-title').textContent;
             const prod_category = form.closest('.card-body').querySelector('.card-category').textContent;
             const size = form.querySelector('select[name="size"]').value;
@@ -476,7 +476,8 @@ session_start();
                 return
             }
 
-            const user_id = <?= json_encode($_SESSION['user_id']); ?>;
+            const user_id = <?= json_encode(isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '0'); ?>;
+
             const prod_name = form.closest('.card-body').querySelector('.card-title').textContent;
             const size = form.querySelector('select[name="size"]').value;
             const quantity = form.querySelector('input[name="quantity"]').value;
@@ -521,7 +522,8 @@ session_start();
                 return
             }
 
-            const user_id = <?= json_encode($_SESSION['user_id']); ?>;
+            const user_id = <?= json_encode(isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '0'); ?>;
+
             const prod_name = form.closest('.card-body').querySelector('.card-title').textContent;
             const size = form.querySelector('select[name="size"]').value;
             const quantity = form.querySelector('input[name="quantity"]').value;
@@ -566,7 +568,8 @@ session_start();
                 return
             }
 
-            const user_id = <?= json_encode($_SESSION['user_id']); ?>;
+            const user_id = <?= json_encode(isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '0'); ?>;
+
             const prod_name = form.closest('.card-body').querySelector('.card-title').textContent;
             const prod_category = form.closest('.card-body').querySelector('.card-category').textContent;
             const size = form.querySelector('select[name="size"]').value;
@@ -695,7 +698,8 @@ session_start();
                 return
             }
 
-            const user_id = <?= json_encode($_SESSION['user_id']); ?>;
+            const user_id = <?= json_encode(isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '0'); ?>;
+
             const prod_name = form.closest('.card-body').querySelector('.card-title').textContent;
             const prod_category = form.closest('.card-body').querySelector('.card-category').textContent;
             const size = form.querySelector('select[name="size"]').value;
@@ -804,7 +808,8 @@ session_start();
                 return
             }
 
-            const user_id = <?= json_encode($_SESSION['user_id']); ?>;
+            const user_id = <?= json_encode(isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '0'); ?>;
+
             const prod_name = form.closest('.card-body').querySelector('.card-title').textContent;
             const prod_category = form.closest('.card-body').querySelector('.card-category').textContent;
             const size = form.querySelector('select[name="size"]').value;
