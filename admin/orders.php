@@ -103,7 +103,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-outline-dark" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-sm btn-dark" onclick="printReceipt()">Print Receipt</button>
+                    <button id="printButton" type="button" class="btn btn-sm btn-dark" onclick="printReceipt()">Print Receipt</button>
                 </div>
             </div>
         </div>
@@ -157,7 +157,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                           <td class="d-flex align-items-center justify-content-center gap-1">
                                 ${row.status === 'pending' ? `<button onclick="mark_as_approved('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Approved</button>` : row.status === 'approved' ? `<button onclick="mark_as_ongoing('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Go</button>` : row.status === 'ongoing' ? `<button onclick="mark_as_complete('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Mark as Delivered</button>` : ``}
                                 ${row.status === 'pending' ? `<button onclick="openDenyModal('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5" data-bs-toggle="modal" data-bs-target="#modal_mark_as_denied">Deny</button>` : ``}
-                                <button class="btn btn-sm btn-outline-dark smallest rounded-5" onclick="view_single_order('${row.order_id}','${row.user_id}')" data-bs-toggle="modal" data-bs-target="#modal_view_single_order">View Items</button>
+                                <button class="btn btn-sm btn-outline-dark smallest rounded-5" onclick="view_single_order('${row.order_id}','${row.user_id}','${row.status}')" data-bs-toggle="modal" data-bs-target="#modal_view_single_order">View Items</button>
                           </td>
                         `;
                         tbody.appendChild(tr);
@@ -170,7 +170,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             xhr.send()
         }
 
-        function view_single_order(order_id, user_id) {
+        function view_single_order(order_id, user_id, status) {
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './ajax/orders/view_single_order.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -219,6 +219,14 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                     </tr>
                 `;
                 table_modal_showing_items.innerHTML = customer_info + totalRow;
+
+                // Disable the print button if the status is pending
+                const printButton = document.getElementById('printButton');
+                if (status === 'pending') {
+                    printButton.disabled = true;
+                } else {
+                    printButton.disabled = false;
+                }
             };
             xhr.send(JSON.stringify({
                 order_id,
