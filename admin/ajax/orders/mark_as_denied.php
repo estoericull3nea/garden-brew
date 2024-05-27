@@ -6,9 +6,10 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 $user_id = $data['user_id'];
 $order_id = $data['order_id'];
+$message = $data['message'];
 
 // Prepare and bind
-$stmt = $conn->prepare("UPDATE orders SET status = 'denied', date_denied = NOW() WHERE order_id = ? AND user_id = ?");
+$stmt = $conn->prepare("UPDATE orders SET status = 'denied', date_denied = NOW(), why_denied = '$message' WHERE order_id = ? AND user_id = ?");
 
 $stmt->bind_param("ii", $order_id, $user_id);
 

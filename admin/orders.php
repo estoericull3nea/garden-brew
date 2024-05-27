@@ -109,6 +109,24 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
         </div>
     </div>
 
+    <!-- Modal notes deny -->
+    <div class="modal fade" id="modal_mark_as_denied" tabindex="-1" aria-labelledby="modal_mark_as_deniedLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Why Deny?</label>
+                        <textarea class="form-control shadow-none" id="message_deny" rows="3" name="message_deny" placeholder="Spamming..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="submitDeny()">Deny</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function show_all_pending_orders() {
             const xhr = new XMLHttpRequest();
@@ -138,7 +156,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                           <td>${formatDateTime(row.order_date)}</td>
                           <td class="d-flex align-items-center justify-content-center gap-1">
                                 ${row.status === 'pending' ? `<button onclick="mark_as_approved('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Approved</button>` : row.status === 'approved' ? `<button onclick="mark_as_ongoing('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Go</button>` : row.status === 'ongoing' ? `<button onclick="mark_as_complete('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Mark as Delivered</button>` : ``}
-                                ${row.status === 'pending' ? `<button onclick="mark_as_deny('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5" >Deny</button>` : ``}
+                                ${row.status === 'pending' ? `<button onclick="openDenyModal('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5" data-bs-toggle="modal" data-bs-target="#modal_mark_as_denied">Deny</button>` : ``}
                                 <button class="btn btn-sm btn-outline-dark smallest rounded-5" onclick="view_single_order('${row.order_id}','${row.user_id}')" data-bs-toggle="modal" data-bs-target="#modal_view_single_order">View Items</button>
                           </td>
                         `;
@@ -256,21 +274,6 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             }))
         }
 
-        function mark_as_deny(order_id, user_id) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', './ajax/orders/mark_as_denied.php', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onload = function() {
-                if (xhr.responseText === '1') {
-                    show_all_pending_orders()
-                    display_custom_toast('Denied', 'success', 2000)
-                }
-            }
-            xhr.send(JSON.stringify({
-                order_id,
-                user_id
-            }))
-        }
 
         function printReceipt() {
             const printContents = document.getElementById('print-section').innerHTML;
@@ -299,6 +302,40 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             printWindow.document.close();
             printWindow.print();
         }
+
+        let currentOrderId;
+        let currentUserId;
+
+        function openDenyModal(orderId, userId) {
+            currentOrderId = orderId;
+            currentUserId = userId;
+        }
+
+
+        function submitDeny() {
+            const message = document.getElementById('message_deny').value;
+            mark_as_deny(currentOrderId, currentUserId, message);
+        }
+
+        function mark_as_deny(order_id, user_id, message) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/orders/mark_as_denied.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.responseText === '1') {
+                    show_all_pending_orders();
+                    display_custom_toast('Denied', 'success', 2000);
+                    hideModal('modal_mark_as_denied')
+                }
+                console.log(xhr.responseText);
+            };
+            xhr.send(JSON.stringify({
+                order_id,
+                user_id,
+                message
+            }));
+        }
+
 
         document.addEventListener("DOMContentLoaded", () => {
             show_all_pending_orders()
