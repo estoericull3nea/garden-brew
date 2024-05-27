@@ -138,7 +138,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                           <td>${formatDateTime(row.order_date)}</td>
                           <td class="d-flex align-items-center justify-content-center gap-1">
                                 ${row.status === 'pending' ? `<button onclick="mark_as_approved('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Approved</button>` : row.status === 'approved' ? `<button onclick="mark_as_ongoing('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Go</button>` : row.status === 'ongoing' ? `<button onclick="mark_as_complete('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Mark as Delivered</button>` : ``}
-                                ${row.status === 'pending' ? `<button onclick="mark_as_deny('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Deny</button>` : ``}
+                                ${row.status === 'pending' ? `<button onclick="mark_as_deny('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5" >Deny</button>` : ``}
                                 <button class="btn btn-sm btn-outline-dark smallest rounded-5" onclick="view_single_order('${row.order_id}','${row.user_id}')" data-bs-toggle="modal" data-bs-target="#modal_view_single_order">View Items</button>
                           </td>
                         `;

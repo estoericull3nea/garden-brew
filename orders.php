@@ -127,6 +127,9 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
         </div>
     </div>
 
+
+
+
     <script>
         function fetch_pending_orders() {
             const xhr = new XMLHttpRequest();
