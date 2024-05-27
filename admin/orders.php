@@ -355,6 +355,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
 
         setInterval(() => {
             show_all_pending_orders()
+            console.log(`running`);
         }, 2000);
 
         document.addEventListener("DOMContentLoaded", () => {

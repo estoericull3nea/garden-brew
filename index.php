@@ -64,10 +64,7 @@ session_start();
     </div>
 
 
-    <script>
-     
-
-    </script>
+ 
 
 </body>
 

@@ -174,7 +174,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                 if (data.error === 'No results found.') {
                     document.getElementById('no_data_found').style.display = 'block'
                     return
-                } 
+                }
                 const display_top_5_products = document.getElementById('display_top_5_products')
                 display_top_5_products.innerHTML = ''
                 let count = 1
@@ -194,6 +194,16 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             }
             xhr.send()
         }
+
+        setInterval(() => {
+            count_pending_orders()
+            count_canceled_orders()
+            count_approved_orders()
+            count_delivered_orders()
+            count_ongoing_orders()
+            count_top_5_products()
+            console.log(`running`);
+        }, 2000);
 
 
         document.addEventListener("DOMContentLoaded", () => {
