@@ -48,7 +48,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
 
 <body>
     <div id="customMessage" class="custom-message d-flex align-items-center justify-content-between gap-2 ">
-        <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-normal text-center"></p>
+        <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-semibold text-center"></p>
         <span id="closeButton"></span>
     </div>
 
@@ -115,7 +115,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Why Deny?</label>
+                        <label class="form-label fw-bold">Why Deny? <span class="text-danger">*</span> </label>
                         <textarea class="form-control shadow-none" id="message_deny" rows="3" name="message_deny" placeholder="Spamming..."></textarea>
                     </div>
                 </div>
@@ -314,6 +314,13 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
 
         function submitDeny() {
             const message = document.getElementById('message_deny').value;
+
+            if (message.trim().length === 0) {
+                display_custom_toast('Message is required', 'danger', 2000);
+                return
+            }
+
+
             mark_as_deny(currentOrderId, currentUserId, message);
         }
 
@@ -339,6 +346,25 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
 
         document.addEventListener("DOMContentLoaded", () => {
             show_all_pending_orders()
+
+
+            // Add event listener to the textarea to submit on Enter key press
+            const messageDenyTextarea = document.getElementById('message_deny');
+            messageDenyTextarea.addEventListener('keydown', function(event) {
+
+                if (event.key === 'Enter') {
+
+                    if (messageDenyTextarea.value.trim().length === 0) {
+                        display_custom_toast('Message is required', 'danger', 2000);
+                        return
+                    }
+
+
+
+                    event.preventDefault(); // Prevent the default action of Enter key
+                    submitDeny();
+                }
+            });
         });
     </script>
 </body>
