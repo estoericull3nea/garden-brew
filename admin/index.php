@@ -20,6 +20,10 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.18);
         }
+
+        #no_data_found {
+            display: none;
+        }
     </style>
 </head>
 
@@ -85,6 +89,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             <div class="row w-100 mt-5 ms-1">
                 <div class="col-sm-12 col-md-6 col-lg-3 w-100">
                     <table class="table table-hover text-center align-middle border caption-top">
+
                         <caption>Top 5 Best Seller Products</caption>
                         <thead>
                             <tr>
@@ -94,11 +99,14 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                                 <th scope="col">Product Size</th>
                                 <th scope="col">Product Total Bought</th>
                             </tr>
+
                         </thead>
+
                         <tbody id="display_top_5_products">
 
                         </tbody>
                     </table>
+                    <h3 class="text-center" id="no_data_found">No Data Found</h3>
                 </div>
             </div>
         </div>
@@ -163,11 +171,14 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText)
+                if (data.error === 'No results found.') {
+                    document.getElementById('no_data_found').style.display = 'block'
+                    return
+                } 
                 const display_top_5_products = document.getElementById('display_top_5_products')
                 display_top_5_products.innerHTML = ''
                 let count = 1
                 data.forEach(prod => {
-                    console.log(prod);
                     const item = `
                         <tr>
                             <td>${count}</td>

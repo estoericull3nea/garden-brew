@@ -81,6 +81,14 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                             <span class="visually-hidden">unread messages</span>
                         </span>
                     </button>
+                    <button class="nav-link position-relative" id="nav-denied-tab" data-bs-toggle="tab" data-bs-target="#nav-denied" type="button" role="tab" aria-controls="nav-denied" aria-selected="false">
+
+                        Denied
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger z-1">
+                            <span class="smallest" id="count_denied"></span>
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </button>
                     <button class="nav-link position-relative" id="nav-delivered-tab" data-bs-toggle="tab" data-bs-target="#nav-delivered" type="button" role="tab" aria-controls="nav-delivered" aria-selected="false">
                         Delivered
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success z-1">
@@ -109,6 +117,10 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                 </div>
                 <div class="tab-pane fade" id="nav-canceled" role="tabpanel" aria-labelledby="nav-canceled-tab" tabindex="0">
                     <div class="mt-5 text-center row" id="canceled_card_container">
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-denied" role="tabpanel" aria-labelledby="nav-denied-tab" tabindex="0">
+                    <div class="mt-5 text-center row" id="denied_card_container">
                     </div>
                 </div>
             </div>
@@ -364,6 +376,44 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             xhr.send();
         }
 
+        function fetch_denied_order() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/order/fetch_denied_order.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                const data = JSON.parse(xhr.responseText);
+
+                const fetch_denied_order = document.getElementById('denied_card_container');
+                fetch_denied_order.innerHTML = '';
+
+                data.forEach(product => {
+                    const order_card = `
+                        <div class="col-12 col-md-6 col-lg-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Order ID: ${product.order_id}</h5>
+                                    <h5 class="card-title">Status: <span class="text-success fs-5 fw-bold"> ${capitalizeFirstLetter(product.status)}</span></h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><span class="fw-semibold">Customer Name:</span> ${product.fname} ${product.lname}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Customer Address:</span> ${product.address}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Customer Phone Number:</span> ${product.phone_number}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Ordered:</span> ${formatDateTime(product.order_date)}</li>
+                                    <li class="list-group-item"><span class="fw-semibold">Date Denied:</span> ${formatDateTime(product.date_denied)}</li>
+                                </ul>
+                                <div class="card-body">
+                                    <button class="btn btn-sm btn-pink card-link" data-bs-toggle="modal" data-bs-target="#modal_view_items" onclick="show_single_order(${product.order_id})">View Items</button>
+                                    ${(product.status !== 'delivered' && product.status !== 'denied' ) ? ` <button class="btn btn-sm btn-danger card-link" onclick="mark_as_cancel(${product.order_id})">Cancel Order</button>` : ``}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    fetch_denied_order.innerHTML += order_card;
+                });
+            };
+            xhr.send();
+        }
+
         function count_pending() {
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './ajax/count/count_pending_status.php', true);
@@ -414,6 +464,16 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             xhr.send()
         }
 
+        function count_denied() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/count/count_denied_status.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                document.getElementById('count_denied').textContent = xhr.responseText
+            };
+            xhr.send()
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             fetch_pending_orders();
             fetch_canceled_orders();
@@ -425,6 +485,8 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
             count_ongoing()
             count_canceled()
             count_delivered()
+            count_denied()
+            fetch_denied_order()
         });
     </script>
 </body>

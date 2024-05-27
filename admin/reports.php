@@ -60,7 +60,6 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             xhr.open('POST', './ajax/orders/fetch_sales.php', true);
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText);
-                console.log(data);
                 // return
                 if (data) {
                     document.getElementById('show_users_table').style.display = 'table';
@@ -73,7 +72,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                                 <td>${row.prod_name}</td>
                                 <td>${row.prod_price}</td>
                                 <td>${row.prod_qty}</td>
-                                <td>${row.status}</td>
+                                <td class="${row.status === 'pending' ? `text-warning fw-bold` : row.status === 'approved' ? `text-primary fw-bold` : row.status === 'delivered' ? `text-success fw-bold` : row.status === 'canceled' ? `text-danger fw-bold` : `text-secondary fw-bold`}" >${capitalizeFirstLetter(row.status)}</td>
                                 <td>${row.fname} ${row.lname}</td>
                                 <td>${row.phone_number}</td>
                                 <td>${row.address}</td>

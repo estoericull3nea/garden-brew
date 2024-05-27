@@ -102,7 +102,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-dark" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-outline-dark" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-sm btn-dark" onclick="printReceipt()">Print Receipt</button>
                 </div>
             </div>
@@ -134,10 +134,11 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                           <td>${row.phone_number}</td>
                           <td>${row.address}</td>
                           <td>${row.payment_mode}</td>
-                          <td class="${row.status === 'pending' ? `text-warning fw-bold` : row.status === 'approved' ? `text-primary fw-bold` : row.status === 'delivered' ? `text-success fw-bold` : row.status === 'canceled' ? `text-danger fw-bold` : `text-secondary fw-bold`}" >${row.status}</td>
+                          <td class="${row.status === 'pending' ? `text-warning fw-bold` : row.status === 'approved' ? `text-primary fw-bold` : row.status === 'delivered' ? `text-success fw-bold` : row.status === 'canceled' ? `text-danger fw-bold` : row.status === 'denied' ? `text-danger fw-bold` : `text-secondary fw-bold`}" >${capitalizeFirstLetter(row.status)}</td>
                           <td>${formatDateTime(row.order_date)}</td>
                           <td class="d-flex align-items-center justify-content-center gap-1">
                                 ${row.status === 'pending' ? `<button onclick="mark_as_approved('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Approved</button>` : row.status === 'approved' ? `<button onclick="mark_as_ongoing('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Go</button>` : row.status === 'ongoing' ? `<button onclick="mark_as_complete('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Mark as Delivered</button>` : ``}
+                                ${row.status === 'pending' ? `<button onclick="mark_as_deny('${row.order_id}', ${row.user_id})" class="btn btn-sm btn-outline-dark smallest rounded-5">Deny</button>` : ``}
                                 <button class="btn btn-sm btn-outline-dark smallest rounded-5" onclick="view_single_order('${row.order_id}','${row.user_id}')" data-bs-toggle="modal" data-bs-target="#modal_view_single_order">View Items</button>
                           </td>
                         `;
@@ -157,7 +158,6 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const data = JSON.parse(xhr.responseText);
-                console.log(data);
                 const table_modal_showing_items = document.getElementById('table_modal_showing_items');
                 table_modal_showing_items.innerHTML = '';
 
@@ -208,34 +208,6 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
             }));
         }
 
-        function printReceipt() {
-            const printContents = document.getElementById('print-section').innerHTML;
-            const originalContents = document.body.innerHTML;
-            const printWindow = window.open('', '', 'height=600,width=800');
-
-            printWindow.document.write('<html><head><title>Print Receipt</title>');
-            printWindow.document.write(`
-                    <style>
-                        @media print {
-                            body { font-size: 0.7rem; }
-                            table { width: 100%; border-collapse: collapse; }
-                            th, td { border: 1px solid black; padding: 8px; text-align: center; }
-                            .shop-name { text-align: center; font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; }
-                            .total-row { text-align: right; }
-                            @page { margin: 0; }
-                            body { margin: 0; }
-                            header, footer { display: none; }
-                        }
-                    </style>
-                `);
-            printWindow.document.write('</head><body>');
-            printWindow.document.write('<div class="shop-name">Garden Brew</div>');
-            printWindow.document.write(printContents);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
-        }
-
         function mark_as_approved(order_id, user_id) {
             const xhr = new XMLHttpRequest();
             xhr.open('POST', './ajax/orders/mark_as_approved.php', true);
@@ -282,6 +254,50 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
                 order_id,
                 user_id
             }))
+        }
+
+        function mark_as_deny(order_id, user_id) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', './ajax/orders/mark_as_denied.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.responseText === '1') {
+                    show_all_pending_orders()
+                    display_custom_toast('Denied', 'success', 2000)
+                }
+            }
+            xhr.send(JSON.stringify({
+                order_id,
+                user_id
+            }))
+        }
+
+        function printReceipt() {
+            const printContents = document.getElementById('print-section').innerHTML;
+            const originalContents = document.body.innerHTML;
+            const printWindow = window.open('', '', 'height=600,width=800');
+
+            printWindow.document.write('<html><head><title>Print Receipt</title>');
+            printWindow.document.write(`
+                    <style>
+                        @media print {
+                            body { font-size: 0.7rem; }
+                            table { width: 100%; border-collapse: collapse; }
+                            th, td { border: 1px solid black; padding: 8px; text-align: center; }
+                            .shop-name { text-align: center; font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; }
+                            .total-row { text-align: right; }
+                            @page { margin: 0; }
+                            body { margin: 0; }
+                            header, footer { display: none; }
+                        }
+                    </style>
+                `);
+            printWindow.document.write('</head><body>');
+            printWindow.document.write('<div class="shop-name">Garden Brew</div>');
+            printWindow.document.write(printContents);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
         }
 
         document.addEventListener("DOMContentLoaded", () => {

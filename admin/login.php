@@ -36,7 +36,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
 
 
     <div id="customMessage" class="custom-message d-flex align-items-center justify-content-between gap-2 ">
-        <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-normal text-center"></p>
+        <p id="messageText" style="font-size: .9rem;" class="mb-0 fw-semibold text-center"></p>
         <span id="closeButton"></span>
     </div>
 
@@ -90,27 +90,16 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
                 const data = xhr.responseText;
-                if (data === 'Incorrect password') {
-                    display_custom_toast('Incorrect Username or Password', 'danger', 3000)
-                } else if (data === '1') {
-                    form_login.reset()
-                    display_custom_toast('Logged In', 'success', 2000)
-                    setTimeout(() => {
-                        window.location.href = 'http://localhost/garden-brew/'
-                    }, 2000);
-                } else if (data === 'User does not exist') {
-                    display_custom_toast('User does not exist', 'danger', 3000)
-                } else {
-                    console.log(data);
-                }
-                console.log(xhr.responseText);
-
-                if (xhr.responseText === '1') {
+                if (data === '1') {
                     form_login.reset()
                     display_custom_toast('Logged In', 'success', 2000)
                     setTimeout(() => {
                         window.location.href = 'http://localhost/garden-brew/admin/'
                     }, 2000);
+                } else if (data === 'Admin account does not exist') {
+                    display_custom_toast('Admin account does not exist', 'danger', 2000)
+                } else if (data === 'Invalid username or password') {
+                    display_custom_toast('Invalid username or password', 'danger', 2000)
                 }
             }
             xhr.send(json_string)

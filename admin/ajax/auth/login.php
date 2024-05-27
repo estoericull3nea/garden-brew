@@ -26,12 +26,12 @@ if ($stmt->num_rows > 0) {
     } else {
         // Invalid password
         http_response_code(401);
-        echo json_encode(['error' => 'Invalid username or password']);
+        echo 'Invalid username or password';
     }
 } else {
     // Invalid username
     http_response_code(401);
-    echo json_encode(['error' => 'Invalid username or password']);
+    echo 'Admin account does not exist';
 }
 
 $stmt->close();
