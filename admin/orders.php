@@ -57,7 +57,7 @@ if (!(isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === tr
         <div class="w-100 mt-5">
             <div class="table-responsive w-100 p-3 ">
                 <table id="show_pending_table" class="caption-top border-0 my-5" style="width:100%; font-size: .7rem;">
-                    <caption>List of Pending Orders</caption>
+                    <caption>List of All Orders</caption>
                     <thead class="text-center ">
                         <tr>
                             <th class="border-0">Order ID</th>

@@ -186,7 +186,7 @@ session_start();
                                             </div>
                                         </div>
                                         <div class="col-12 my-2">
-                                            <p class="card-text fw-medium" id="price-${product.prod_id}">${product.prod_price == 0 ? '39' : product.prod_price} Pesos</p>
+                                            <p class="card-text fw-medium" id="price-${product.prod_id}">${product.prod_price != 0 ? product.prod_price : '39'} Pesos</p>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center mb-2">
