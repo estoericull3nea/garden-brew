@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 28, 2024 at 01:31 AM
+-- Generation Time: May 28, 2024 at 11:57 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -94,7 +94,8 @@ INSERT INTO `orders` (`order_id`, `user_id`, `payment_mode`, `status`, `order_da
 (60, 24, 'cod', 'canceled', '2024-05-28 06:16:39', NULL, '2024-05-28 06:16:50', NULL, NULL, NULL, NULL, NULL),
 (61, 24, 'cod', 'canceled', '2024-05-28 06:20:23', NULL, '2024-05-28 06:22:54', NULL, NULL, NULL, NULL, NULL),
 (62, 24, 'cod', 'delivered', '2024-05-28 06:24:40', '2024-05-28 06:25:43', NULL, '2024-05-28 06:26:05', '2024-05-28 06:26:00', NULL, NULL, NULL),
-(63, 24, 'cod', 'pending', '2024-05-28 06:28:33', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(63, 24, 'cod', 'pending', '2024-05-28 06:28:33', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(64, 26, 'cod', 'pending', '2024-05-29 05:40:21', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -144,7 +145,9 @@ INSERT INTO `order_items` (`order_items_id`, `order_id`, `prod_id`, `prod_name`,
 (126, 60, 3, 'Matcha', 39, '16oz', 1, 39, 'matcha.png', 24),
 (127, 61, 2, 'Dark Chocolate', 39, '16oz', 2, 78, 'dark_choco.png', 24),
 (128, 62, 2, 'Dark Chocolate', 39, '16oz', 1, 39, 'dark_choco.png', 24),
-(129, 63, 1, 'Cookies and Cream', 39, '16oz', 4, 156, 'cookies_and_cream.png', 24);
+(129, 63, 1, 'Cookies and Cream', 39, '16oz', 4, 156, 'cookies_and_cream.png', 24),
+(130, 64, 109, 'qwe qwe', 49, '22oz', 1, 49, 'gb_latest.drawio.png', 26),
+(131, 64, 109, 'qwe qwe', 39, '16oz', 1, 39, 'gb_latest.drawio.png', 26);
 
 -- --------------------------------------------------------
 
@@ -197,7 +200,7 @@ INSERT INTO `products` (`prod_id`, `prod_name`, `prod_price`, `prod_img`, `prod_
 (25, 'Pepperoni', 0, 'pepperoni.png', 'Solo', 1, 'Pizza', 'Pepperoni pizza: classic crust topped with spicy pepperoni and melted cheese', '2024-05-25 19:09:58', '2024-05-26 23:41:03'),
 (26, 'Four Seasons', 0, 'four_seasons.png', 'Solo', 1, 'Pizza', 'Four Seasons pizza: a classic crust divided into sections with diverse toppings representing the four seasons', '2024-05-25 19:09:58', '2024-05-26 23:41:26'),
 (27, 'Pork Salami', 0, 'pork_salami.png', 'Solo', 1, 'Pizza', 'Pork Salami pizza: savory pork salami and melted cheese on a classic crust', '2024-05-25 19:09:58', '2024-05-26 23:41:42'),
-(109, 'qwe qwe', 49, 'gb_latest.drawio.png', '22', 1, 'Classic', 'qwe', '2024-05-27 14:01:55', '2024-05-27 14:01:55');
+(113, 'qwe', 39, 'gb_latest.drawio.png', '39', 1, 'Hot', 'sdafsdf', '2024-05-29 05:56:27', '2024-05-29 05:56:27');
 
 -- --------------------------------------------------------
 
@@ -281,25 +284,25 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=408;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=412;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `order_items_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
+  MODIFY `order_items_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `prod_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+  MODIFY `prod_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
 
 --
 -- AUTO_INCREMENT for table `users`
