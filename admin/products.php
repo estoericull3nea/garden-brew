@@ -307,9 +307,9 @@
                             <td>${row.is_available}</td>
                             <td>${row.category}</td>
                             <td>${row.prod_desc}</td>
-                            <td>
-                                <button class="btn btn-primary btn-sm edit-btn" data-id="${row.prod_id}" data-toggle="modal" data-target="#editProductModal">Edit</button>
-                                <button class="btn btn-danger btn-sm delete-btn" data-id="${row.prod_id}">Delete</button>
+                            <td class="d-flex align-item gap-1">
+                                <button class="btn btn-outline-dark btn-sm edit-btn smallest rounded-5" data-id="${row.prod_id}" data-toggle="modal" data-target="#editProductModal">Edit</button>
+                                <button class="btn btn-outline-dark btn-sm delete-btn smallest rounded-5" data-id="${row.prod_id}">Delete</button>
                             </td>
                         `;
 
