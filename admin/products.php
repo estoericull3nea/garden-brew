@@ -22,7 +22,7 @@
         <?php require './partials/aside.php'; ?>
         <div>
             <div class="text-end me-2">
-                <button class="btn btn-pink my-3" data-toggle="modal" data-target="#addProductModal">Add Product</button>
+                <button class="btn shadow-none btn-pink my-3 shadow-none" data-toggle="modal" data-target="#addProductModal">Add Product</button>
             </div>
             <div class="table-responsive w-100 p-3">
                 <table id="show_users_table" class="caption-top border-0 my-5" style="width:100%; font-size: .7rem;">
@@ -53,41 +53,39 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    
                     </div>
                     <div class="modal-body">
                         <!-- Add Product Form Fields -->
                         <div class="form-group">
                             <label for="prod_name">Product Name</label>
-                            <input type="text" class="form-control" id="prod_name" name="prod_name" required>
+                            <input type="text" class="form-control shadow-none" id="prod_name" name="prod_name" required>
                         </div>
                         <div class="form-group">
                             <label for="prod_price">Product Price</label>
-                            <input type="number" class="form-control" id="prod_price" name="prod_price" required>
+                            <input type="number" class="form-control shadow-none" id="prod_price" name="prod_price" required>
                         </div>
                         <div class="form-group">
                             <label for="prod_img">Product Image</label>
-                            <input type="file" class="form-control" id="prod_img" name="prod_img" required onchange="previewImage(event, 'imagePreview')">
+                            <input type="file" class="form-control shadow-none" id="prod_img" name="prod_img" required onchange="previewImage(event, 'imagePreview')">
                         </div>
                         <div class="form-group text-center">
                             <img id="imagePreview" class="img-fluid" style="max-height: 200px;">
                         </div>
                         <div class="form-group">
                             <label for="prod_size">Product Size</label>
-                            <input type="text" class="form-control" id="prod_size" name="prod_size" required>
+                            <input type="text" class="form-control shadow-none" id="prod_size" name="prod_size" required placeholder="16 or 22">
                         </div>
                         <div class="form-group">
                             <label for="is_available">Product Available</label>
-                            <select class="form-control" id="is_available" name="is_available" required>
+                            <select class="form-control shadow-none" id="is_available" name="is_available" required>
                                 <option value="1">Yes</option>
                                 <option value="0">No</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="category">Product Category</label>
-                            <select class="form-control" id="category" name="category" required>
+                            <select class="form-control shadow-none" id="category" name="category" required>
                                 <option value="Classic">Classic</option>
                                 <option value="Premium">Premium</option>
                                 <option value="Special">Special</option>
@@ -96,12 +94,12 @@
                         </div>
                         <div class="form-group">
                             <label for="prod_desc">Product Description</label>
-                            <textarea class="form-control" id="prod_desc" name="prod_desc" rows="3" required></textarea>
+                            <textarea class="form-control shadow-none" id="prod_desc" name="prod_desc" rows="3" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Product</button>
+                        <button type="button" class="btn shadow-none btn-sm btn-outline-dark" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn shadow-none btn-sm btn-pink">Save Product</button>
                     </div>
                 </div>
             </form>
@@ -124,47 +122,47 @@
                         <input type="hidden" id="edit_prod_id" name="prod_id">
                         <div class="form-group">
                             <label for="edit_prod_name">Product Name</label>
-                            <input type="text" class="form-control" id="edit_prod_name" name="prod_name" required>
+                            <input type="text" class="form-control shadow-none" id="edit_prod_name" name="prod_name" required>
                         </div>
                         <div class="form-group">
                             <label for="edit_prod_price">Product Price</label>
-                            <input type="number" class="form-control" id="edit_prod_price" name="prod_price" required>
+                            <input type="number" class="form-control shadow-none" id="edit_prod_price" name="prod_price" required>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="edit_prod_img">Product Image</label>
-                            <input type="file" class="form-control" id="edit_prod_img" name="prod_img" onchange="previewImage(event, 'editImagePreview')">
-                        </div>
+                            <input type="file" class="form-control shadow-none" id="edit_prod_img" name="prod_img" onchange="previewImage(event, 'editImagePreview')">
+                        </div> -->
                         <div class="form-group text-center">
                             <img id="editImagePreview" class="img-fluid" style="max-height: 200px;">
                         </div>
                         <div class="form-group">
                             <label for="edit_prod_size">Product Size</label>
-                            <input type="text" class="form-control" id="edit_prod_size" name="prod_size" required>
+                            <input type="text" class="form-control shadow-none" id="edit_prod_size" name="prod_size" required>
                         </div>
                         <div class="form-group">
                             <label for="edit_is_available">Product Available</label>
-                            <select class="form-control" id="edit_is_available" name="is_available" required>
+                            <select class="form-control shadow-none" id="edit_is_available" name="is_available" required>
                                 <option value="1">Yes</option>
                                 <option value="0">No</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="edit_category">Product Category</label>
-                            <select class="form-control" id="edit_category" name="category" required>
+                            <select class="form-control shadow-none" id="edit_category" name="category" required>
                                 <option value="Classic">Classic</option>
                                 <option value="Premium">Premium</option>
                                 <option value="Special">Special</option>
                                 <option value="Hot">Hot</option>
                             </select>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label for="edit_prod_desc">Product Description</label>
-                            <textarea class="form-control" id="edit_prod_desc" name="prod_desc" rows="3" required></textarea>
+                            <textarea class="form-control shadow-none" id="edit_prod_desc" name="prod_desc" rows="3" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update Product</button>
+                        <button type="button" class="btn shadow-none btn-outline-dark" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn shadow-none btn-pink">Update Product</button>
                     </div>
                 </div>
             </form>
@@ -211,6 +209,7 @@
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', './ajax/products/edit_prod.php', true);
                 xhr.onload = function() {
+                // console.log(xhr.responseText);return
                     if (xhr.status === 200) {
                         $('#editProductModal').modal('hide');
                         display_custom_toast('Updated', 'success', 2000)
@@ -237,7 +236,7 @@
                             document.getElementById('edit_prod_price').value = product.prod_price;
                             document.getElementById('edit_prod_size').value = product.prod_size;
                             document.getElementById('edit_is_available').value = product.is_available;
-                            document.getElementById('edit_category').value = product.category;
+                            // document.getElementById('edit_category').value = product.category;
                             document.getElementById('edit_prod_desc').value = product.prod_desc;
 
                             // Set image preview
@@ -308,8 +307,8 @@
                             <td>${row.category}</td>
                             <td>${row.prod_desc}</td>
                             <td class="d-flex align-item gap-1">
-                                <button class="btn btn-outline-dark btn-sm edit-btn smallest rounded-5" data-id="${row.prod_id}" data-toggle="modal" data-target="#editProductModal">Edit</button>
-                                <button class="btn btn-outline-dark btn-sm delete-btn smallest rounded-5" data-id="${row.prod_id}">Delete</button>
+                                <button class="btn shadow-none btn-outline-dark btn-sm edit-btn smallest rounded-5" data-id="${row.prod_id}" data-toggle="modal" data-target="#editProductModal">Edit</button>
+                                <button class="btn shadow-none btn-outline-dark btn-sm delete-btn smallest rounded-5" data-id="${row.prod_id}">Delete</button>
                             </td>
                         `;
 
