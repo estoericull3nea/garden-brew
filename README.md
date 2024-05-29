@@ -1,5 +1,7 @@
-HTML 5
-CSS 3 & Bootstrap 5
-Modern JS (> ES6)
-Vanilla PHP
-AJAX + XHR
+<ul>
+  <li>HTML 5</li>
+  <li>CSS 3 & Bootstrap 5</li>
+  <li>Modern JS (> ES6)</li>
+  <li>Vanilla PHP</li>
+  <li>AJAX + XHR</li>
+</ul>
