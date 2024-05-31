@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center  gap-2 " href="http://localhost/garden-brew/">
-            <img src="./assets/images/gb_logo-transparent.png" alt="Logo" width="45" height="45 " class="d-inline-block align-text-top">
+            <img loading="lazy" src="./assets/images/gb_logo-transparent.png" alt="Logo" width="45" height="45 " class="d-inline-block align-text-top">
             <span class="fw-semibold text-pink fs-4">Garden Brew</span>
         </a>
 

@@ -169,7 +169,7 @@ session_start();
                     const product_card = `
                     <div class="col-12 col-md-6 col-xl-4 mb-3">
                         <div class="card" role="button">
-                            <img src="./assets/images/milktea/classic/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
+                            <img loading="lazy" src="./assets/images/milktea/classic/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
                             <div class="card-body">
                                 <h5 class="card-title fw-semibold">${product.prod_name}</h5>
                                 <p class="card-category fw-semibold">${product.category}</p>
@@ -221,7 +221,7 @@ session_start();
                     const product_card = `
                     <div class="col-12 col-md-6 col-xl-4 mb-3">
                         <div class="card" role="button">
-                            <img src="./assets/images/milktea/special/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
+                            <img loading="lazy" src="./assets/images/milktea/special/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
                             <div class="card-body">
                                 <h5 class="card-title fw-semibold">${product.prod_name}</h5>
                                 <p class="card-category fw-semibold">${product.category}</p>
@@ -271,7 +271,7 @@ session_start();
                     const product_card = `
                     <div class="col-12 col-md-6 col-xl-4 mb-3">
                         <div class="card" role="button">
-                            <img src="./assets/images/milktea/premium/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
+                            <img loading="lazy" src="./assets/images/milktea/premium/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
                             <div class="card-body">
                                 <h5 class="card-title fw-semibold">${product.prod_name}</h5>
                                 <p class="card-category fw-semibold">${product.category}</p>
@@ -321,7 +321,7 @@ session_start();
                     const product_card = `
                     <div class="col-12 col-md-6 col-xl-3 mb-3">
                         <div class="card" role="button">
-                            <img src="./assets/images/milktea/hot/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
+                            <img loading="lazy" src="./assets/images/milktea/hot/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
                             <div class="card-body">
                                 <h5 class="card-title fw-semibold">${product.prod_name}</h5>
                                 <p class="card-category fw-semibold">${product.category}</p>
@@ -630,7 +630,7 @@ session_start();
                     const product_card = `
                     <div class="col-12 col-md-6 col-xl-4 mb-3">
                         <div class="card" role="button">
-                            <img src="./assets/images/milktea/other/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
+                            <img loading="lazy" src="./assets/images/milktea/other/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
                             <div class="card-body">
                                 <h5 class="card-title fw-semibold">${product.prod_name}</h5>
                                 <p class="card-category fw-semibold">${product.category}</p>
@@ -744,7 +744,7 @@ session_start();
                     const product_card = `
                     <div class="col-12 col-md-6 col-xl-4 mb-3">
                         <div class="card" role="button">
-                            <img src="./assets/images/milktea/other/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
+                            <img loading="lazy" src="./assets/images/milktea/other/${product.prod_img}" class="card-img-top" alt="${product.prod_img}" style="height: 250px;">
                             <div class="card-body">
                                 <h5 class="card-title fw-semibold">${product.prod_name}</h5>
                                 <p class="card-category fw-semibold">${product.category}</p>

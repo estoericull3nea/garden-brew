@@ -70,7 +70,7 @@
                             <input type="file" class="form-control shadow-none" id="prod_img" name="prod_img" required onchange="previewImage(event, 'imagePreview')">
                         </div>
                         <div class="form-group text-center">
-                            <img id="imagePreview" class="img-fluid" style="max-height: 200px;">
+                            <img loading="lazy" id="imagePreview" class="img-fluid" style="max-height: 200px;">
                         </div>
                         <div class="form-group">
                             <label for="prod_size">Product Size</label>
@@ -133,7 +133,7 @@
                             <input type="file" class="form-control shadow-none" id="edit_prod_img" name="prod_img" onchange="previewImage(event, 'editImagePreview')">
                         </div> -->
                         <div class="form-group text-center">
-                            <img id="editImagePreview" class="img-fluid" style="max-height: 200px;">
+                            <img loading="lazy" id="editImagePreview" class="img-fluid" style="max-height: 200px;">
                         </div>
                         <div class="form-group">
                             <label for="edit_prod_size">Product Size</label>
@@ -300,7 +300,7 @@
                             <td>${row.prod_name}</td>
                             <td>${row.prod_price}</td>
                             <td>
-                                <img src="../assets/images/milktea/${prod_img_path}/${row.prod_img}" class="img-fluid" style="height: 60px; width: 60px;">
+                                <img loading="lazy" src="../assets/images/milktea/${prod_img_path}/${row.prod_img}" class="img-fluid" style="height: 60px; width: 60px;">
                             </td>
                             <td>${row.prod_size}</td>
                             <td>${row.is_available}</td>

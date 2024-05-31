@@ -44,7 +44,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         <div class="container h-100">
             <div class="row h-100 align-items-center">
                 <div class="col-12 col-md-6">
-                    <img src="../assets/images/gb_logo-transparent.png" class="img-fluid" alt="Sample image">
+                    <img loading="lazy" src="../assets/images/gb_logo-transparent.png" class="img-fluid" alt="Sample image">
                 </div>
                 <div class="col-12 col-md-6">
                     <form id="form_login" method="POST">

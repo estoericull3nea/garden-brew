@@ -31,7 +31,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
         <div class="container">
             <div class="text-center" id="display_if_no_cart">
                 <h1 class="text-gradient">Empty Cart :((</h1>
-                <img src="./assets/images/empty_cart.png" alt="">
+                <img loading="lazy" src="./assets/images/empty_cart.png" alt="">
             </div>
             <h1 class="mb-5">Your Cart</h1>
             <table class="table text-center align-middle">
@@ -119,7 +119,7 @@ if (!(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true
                                 </td>
                                 <td>${cart.prod_size}</td>
                                 <td>${cart.prod_price}</td>
-                                <td><img src="./assets/images/milktea/${prod_img_path}/${cart.prod_img}" style="height: 90px; width: 90px;"></td>
+                                <td><img loading="lazy" src="./assets/images/milktea/${prod_img_path}/${cart.prod_img}" style="height: 90px; width: 90px;"></td>
                                 <td>${cart.prod_total}</td>
                                 <td>
                                     <button class="btn btn-sm btn-pink" onclick="remove_cart(${cart.cart_id})">Remove</button>

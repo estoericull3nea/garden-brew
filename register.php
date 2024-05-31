@@ -36,7 +36,7 @@
         <div class="container" style="height: 100vh;">
             <div class="row align-items-center justify-content-center h-100">
                 <div class="col-12 col-md-6 mb-4">
-                    <img src="./assets/images/gb_logo-transparent.png" class="img-fluid" alt="Sample image">
+                    <img loading="lazy" src="./assets/images/gb_logo-transparent.png" class="img-fluid" alt="Sample image">
                 </div>
                 <div class="col-12 col-md-6">
                     <form id="form_register" method="POST">

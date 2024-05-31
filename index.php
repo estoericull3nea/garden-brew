@@ -27,10 +27,10 @@ session_start();
                     <p class="my-4">
                     <p class="my-4" style="max-width: 450px;">Your ultimate destination for <span class="text-pink">delightful treats</span>. Experience the perfect blend of flavors that will leave you craving for more!</p>
                     </p>
-                    <a href="http://localhost/garden-brew/products.php" class="btn btn-pink fw-medium">Order Now <img src="./assets/images/icons/bubble-tea.png" class="ms-1"></a>
+                    <a href="http://localhost/garden-brew/products.php" class="btn btn-pink fw-medium">Order Now <img loading="lazy" src="./assets/images/icons/bubble-tea.png" class="ms-1"></a>
                 </div>
                 <div class="col-12 col-md-6">
-                    <img src="./assets/images/hero-img.png" alt="" class="img-fluid">
+                    <img loading="lazy" src="./assets/images/hero-img.png" alt="" class="img-fluid">
                 </div>
             </div>
         </div>
